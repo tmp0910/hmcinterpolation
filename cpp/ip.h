@@ -43,8 +43,7 @@ Image*	ip_brighten (Image* src, double alpha);
 Image*	ip_contrast (Image* src, double alpha);
 Image*	ip_composite (Image* src, const char* imageName, 
 					  const char* maskName);
-Image*	ip_interpolate (Image* src, const char* imageName, 
-					  double inter);
+Image* ip_interpolate (const char* imageName1, const char* imageName2, double inter);
 Image*	ip_crop (Image* src, int x0, int y0, int x1, int y1);
 Image*	ip_edge_detect (Image* src);
 Image*	ip_extract (Image* src, int channel);

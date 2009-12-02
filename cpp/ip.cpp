@@ -6,6 +6,15 @@
 #include <math.h>
 
 
+
+Image* ip_interpolate (const char* imageName1, const char* imageName2, double inter)
+{
+	cout << imageName1 << endl;
+	cout << imageName2 << endl;
+	cout << inter << endl;
+	return NULL;
+}
+
 /*
  * Inter/extrapolate function
  */
@@ -237,14 +246,6 @@ Image* ip_composite (Image* src, const char* imageName,
 			}
 		}
 	}
-	return result;
-}
-
-Image* ip_interpolate (Image* src, const char* imageName, double inter)
-{
-	Image* result = new Image(*src);
-	cout << imageName << endl;
-	cout << inter << endl;
 	return result;
 }
 
