@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <cstdlib>
 #include <math.h>
-
+#include <vector>
 
 
 Image* ip_interpolate (const char* imageName1, const char* imageName2, double inter)
@@ -12,7 +12,45 @@ Image* ip_interpolate (const char* imageName1, const char* imageName2, double in
 	cout << imageName1 << endl;
 	cout << imageName2 << endl;
 	cout << inter << endl;
-	return NULL;
+	
+	Image* i1 = new Image(imageName1);
+	Image* i2 = new Image(imageName2);
+	
+	// Create gaussian pyramid
+	vector<Image*> p1;
+	vector<Image*> p2;
+	p1.push_back(i1);
+	p2.push_back(i2);
+	for (int i = 1; i < (log(i1->getHeight())/log(2)); i++) {
+		cout << i << endl;
+		int currSize = i1->getHeight()/pow(2, i);
+		Image* t1 = new Image(currSize, currSize, 1);
+		Image* t2 = new Image(currSize, currSize, 1);
+		
+		Image* prev1 = p1.back();
+		Image* prev2 = p2.back();
+		
+		for (int x = 0; x < currSize; x++) {
+			for (int y = 0; y < currSize; y++) {
+				t1->setPixel(x, y, 0, (prev1->getPixel(x*2, y*2, 0)+prev1->getPixel(x*2+1, y*2, 0)+prev1->getPixel(x*2, y*2+1, 0)+prev1->getPixel(x*2+1, y*2+1, 0))/4);
+				t2->setPixel(x, y, 0, (prev2->getPixel(x*2, y*2, 0)+prev2->getPixel(x*2+1, y*2, 0)+prev2->getPixel(x*2, y*2+1, 0)+prev2->getPixel(x*2+1, y*2+1, 0))/4);
+			}
+		}
+		
+		p1.push_back(t1);
+		p2.push_back(t2);
+		
+		char buffer1[30];
+		sprintf(buffer1,"t1_%d.bmp",currSize);
+		t1->writeBMP(buffer1);
+		
+		char buffer2[30];
+		sprintf(buffer2,"t2_%d.bmp",currSize);
+		t2->writeBMP(buffer2);
+	}
+	
+	Image* result = new Image(100,100);
+	return result;
 }
 
 /*
