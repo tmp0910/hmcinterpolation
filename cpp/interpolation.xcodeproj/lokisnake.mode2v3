@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>89DA27D710C6402C000EF81F</string>
+						<string>89DA27DD10C65D71000EF81F</string>
 						<key>history</key>
 						<array>
 							<string>89DA279110C6376F000EF81F</string>
@@ -257,7 +257,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>89DA27D810C6402C000EF81F</string>
+						<string>89DA27DE10C65D71000EF81F</string>
 						<key>history</key>
 						<array>
 							<string>89DA279E10C6398B000EF81F</string>
@@ -297,7 +297,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>89DA27D910C6402C000EF81F</string>
+						<string>89DA27DF10C65D71000EF81F</string>
 						<key>history</key>
 						<array>
 							<string>89DA27A810C63B6B000EF81F</string>
@@ -337,7 +337,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>89DA27DA10C6402C000EF81F</string>
+						<string>89DA27E010C65D71000EF81F</string>
 						<key>history</key>
 						<array>
 							<string>89497FD910C37D1C0081966F</string>
@@ -377,7 +377,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>89DA27DB10C6402C000EF81F</string>
+						<string>89DA27E110C65D71000EF81F</string>
 						<key>history</key>
 						<array>
 							<string>89497FDA10C37D1C0081966F</string>
@@ -676,7 +676,6 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>89DA27DC10C6402C000EF81F</string>
 		<string>89DA279610C6376F000EF81F</string>
 		<string>89DA279710C6376F000EF81F</string>
 		<string>1C530D54069F1CE1000CFCEE</string>
@@ -685,8 +684,8 @@
 		<string>89497F9510C33C020081966F</string>
 		<string>/Users/lokisnake/projects/hmcinterpolation/cpp/interpolation.xcodeproj</string>
 		<string>89DA27A610C63B6B000EF81F</string>
-		<string>89DA27AC10C63B6B000EF81F</string>
 		<string>1C530D5B069F1CE1000CFCEE</string>
+		<string>89DA27AC10C63B6B000EF81F</string>
 		<string>89497F9B10C33C020081966F</string>
 	</array>
 	<key>WindowString</key>

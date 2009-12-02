@@ -53,6 +53,16 @@ Image* ip_interpolate (const char* imageName1, const char* imageName2, double in
 	return result;
 }
 
+double gradientx(Image* img, int x, int y)
+{
+	return img->getPixel_(x-1, y, 0) * (-0.5) + img->getPixel_(x+1, y, 0) * 0.5;
+}
+
+double gradienty(Image* img, int x, int y)
+{
+	return img->getPixel_(x, y-1, 0) * (-0.5) + img->getPixel_(x, y+1, 0) * 0.5;
+}
+
 /*
  * Inter/extrapolate function
  */
