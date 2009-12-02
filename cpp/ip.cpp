@@ -53,13 +53,55 @@ Image* ip_interpolate (const char* imageName1, const char* imageName2, double in
 	return result;
 }
 
+double correspondence(Image* A, Image* B, int p1_x, int p1_y, int p2_x, int p2_y)
+{
+	int pA_x = p1_x;
+	int pA_y = p1_y;
+	int pB_x = p2_x;
+	int pB_y = p2_y;
+	
+	// function
+	double gradientCost = sqrt((gradientx(A, pA_x, pA_y) - gradientx(B, pB_x, pB_y))**2 + (gradienty(A, pA_x, pA_y) - gradienty(B, pB_x, pB_y))**2)**2;
+	double intensityCost = 0.5*sqrt( (A->getPixel(pA_x, pA_y, 0) - B->getPixel(pB_x, pB_y, 0))**2 )**2;
+	double totalCost = sqrt( (gradientCost + intensityCost) / ( stdDev(A, pA_x, pA_y) * stdDev(B, pB_x, pB_y) ) );
+}
+
 double gradientx(Image* img, int x, int y)
 {
 	return img->getPixel_(x-1, y, 0) * (-0.5) + img->getPixel_(x+1, y, 0) * 0.5;
 }
 
-double gradienty(Image* img, int x, int y)
+
+double stdDev(Image* image, int x, int y)
 {
+	double stdDev = 0;
+	double mean = 0;
+	double numNeighbors = 0;
+	double coord[] = {x, y-1, x-1, y, x+1, y, x, y+1};
+	
+	for (int i =0; i<8; i+=2) {
+		if (coord[i] >= 0 and coord[i] < image->getWidth() and coord[i+1] >= 0 and coord[i+1] < image->getHeight()) {
+			mean += image->getPixel(coord[i], coord[i+1], 0);
+			numNeighbors += 1;
+		}
+		else {
+			coord[i] = -1;
+			coord[i+1] = -1;
+		}
+		
+	}
+	mean /= numNeighbors;
+	for (int i=0; i<8; i+=2) {
+		if (coord[i]>=0) {
+			stdDev += (image->getPixel(coord[i], coord[i+1], 0)-mean)**2;
+		}
+	}
+	stdDev /= numNeighbors;
+	return sqrt(stdDev);
+}	
+
+double gradienty(Image* img, int x, int y)
+{	
 	return img->getPixel_(x, y-1, 0) * (-0.5) + img->getPixel_(x, y+1, 0) * 0.5;
 }
 
