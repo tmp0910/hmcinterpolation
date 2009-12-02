@@ -1,0 +1,221 @@
+// !$*UTF8*$!
+{
+	08FB7793FE84155DC02AAC07 /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = 89497F3A10C32DC60081966F /* interpolation */;
+		activeTarget = 8DD76F620486A84900D96B5E /* interpolation */;
+		addToTargets = (
+			8DD76F620486A84900D96B5E /* interpolation */,
+		);
+		breakpoints = (
+		);
+		codeSenseManager = 89497F4510C32DC80081966F /* Code sense */;
+		executables = (
+			89497F3A10C32DC60081966F /* interpolation */,
+		);
+		perUserDictionary = {
+			PBXPerProjectTemplateStateSaveDate = 281229745;
+			PBXWorkspaceStateSaveDate = 281229745;
+		};
+		perUserProjectItems = {
+			89497F9110C33B770081966F /* PBXBookmark */ = 89497F9110C33B770081966F /* PBXBookmark */;
+			89497F9D10C33C020081966F /* PBXTextBookmark */ = 89497F9D10C33C020081966F /* PBXTextBookmark */;
+			89497FAD10C365980081966F /* PBXTextBookmark */ = 89497FAD10C365980081966F /* PBXTextBookmark */;
+			89497FCB10C368020081966F /* PBXTextBookmark */ = 89497FCB10C368020081966F /* PBXTextBookmark */;
+			89497FD810C37D1C0081966F /* PBXTextBookmark */ = 89497FD810C37D1C0081966F /* PBXTextBookmark */;
+			89497FD910C37D1C0081966F /* PBXTextBookmark */ = 89497FD910C37D1C0081966F /* PBXTextBookmark */;
+			89497FDA10C37D1C0081966F /* PBXTextBookmark */ = 89497FDA10C37D1C0081966F /* PBXTextBookmark */;
+		};
+		sourceControlManager = 89497F4410C32DC80081966F /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	08FB7796FE84155DC02AAC07 /* main.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {656, 2079}}";
+			sepNavSelRange = "{2363, 0}";
+			sepNavVisRange = "{2157, 331}";
+			sepNavWindowFrame = "{{16, 443}, {653, 730}}";
+		};
+	};
+	89497F3A10C32DC60081966F /* interpolation */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = interpolation;
+		savedGlobals = {
+		};
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+		variableFormatDictionary = {
+		};
+	};
+	89497F4410C32DC80081966F /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	89497F4510C32DC80081966F /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	89497F4710C339A50081966F /* common.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {594, 617}}";
+			sepNavSelRange = "{753, 0}";
+			sepNavVisRange = "{0, 1164}";
+			sepNavWindowFrame = "{{819, 352}, {653, 730}}";
+		};
+	};
+	89497F4810C339A50081966F /* control.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {594, 8162}}";
+			sepNavSelRange = "{15522, 33}";
+			sepNavVisRange = "{15090, 1125}";
+			sepNavWindowFrame = "{{84, 380}, {653, 730}}";
+		};
+	};
+	89497F4910C339A50081966F /* control.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {594, 617}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 629}";
+			sepNavWindowFrame = "{{107, 359}, {653, 730}}";
+		};
+	};
+	89497F4A10C339A50081966F /* image.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {594, 11341}}";
+			sepNavSelRange = "{20759, 30}";
+			sepNavVisRange = "{22761, 1201}";
+			sepNavWindowFrame = "{{380, 276}, {653, 730}}";
+		};
+	};
+	89497F4B10C339A50081966F /* image.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {439, 1661}}";
+			sepNavSelRange = "{48, 19}";
+			sepNavVisRange = "{0, 114}";
+			sepNavWindowFrame = "{{38, 422}, {653, 730}}";
+		};
+	};
+	89497F6410C33A090081966F /* main.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {594, 617}}";
+			sepNavSelRange = "{52, 19}";
+			sepNavVisRange = "{0, 491}";
+			sepNavWindowFrame = "{{222, 254}, {653, 730}}";
+		};
+	};
+	89497F6F10C33A300081966F /* ip.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {594, 6820}}";
+			sepNavSelRange = "{5671, 54}";
+			sepNavVisRange = "{4793, 1385}";
+			sepNavWindowFrame = "{{959, 76}, {653, 730}}";
+		};
+	};
+	89497F7010C33A300081966F /* ip.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {594, 770}}";
+			sepNavSelRange = "{1621, 0}";
+			sepNavVisRange = "{144, 2262}";
+			sepNavWindowFrame = "{{468, 209}, {653, 730}}";
+		};
+	};
+	89497F9110C33B770081966F /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 89497F7010C33A300081966F /* ip.h */;
+	};
+	89497F9D10C33C020081966F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 89497F7010C33A300081966F /* ip.h */;
+		name = "ip.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1999;
+		vrLoc = 0;
+	};
+	89497FAD10C365980081966F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 89497F4810C339A50081966F /* control.cpp */;
+		name = "control.cpp: 264";
+		rLen = 11;
+		rLoc = 6112;
+		rType = 0;
+		vrLen = 1257;
+		vrLoc = 5492;
+	};
+	89497FCB10C368020081966F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 89497F6F10C33A300081966F /* ip.cpp */;
+		name = "ip.cpp: 246";
+		rLen = 0;
+		rLoc = 5725;
+		rType = 0;
+		vrLen = 1345;
+		vrLoc = 4795;
+	};
+	89497FD810C37D1C0081966F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 89497F6F10C33A300081966F /* ip.cpp */;
+		name = "ip.cpp: 245";
+		rLen = 54;
+		rLoc = 5671;
+		rType = 0;
+		vrLen = 1385;
+		vrLoc = 4793;
+	};
+	89497FD910C37D1C0081966F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 89497F4810C339A50081966F /* control.cpp */;
+		name = "control.cpp: 724";
+		rLen = 33;
+		rLoc = 15522;
+		rType = 0;
+		vrLen = 1125;
+		vrLoc = 15090;
+	};
+	89497FDA10C37D1C0081966F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 89497F7010C33A300081966F /* ip.h */;
+		name = "ip.h: 47";
+		rLen = 0;
+		rLoc = 1621;
+		rType = 0;
+		vrLen = 2262;
+		vrLoc = 144;
+	};
+	8DD76F620486A84900D96B5E /* interpolation */ = {
+		activeExec = 0;
+		executables = (
+			89497F3A10C32DC60081966F /* interpolation */,
+		);
+	};
+}
