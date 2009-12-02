@@ -61,9 +61,11 @@ double correspondence(Image* A, Image* B, int p1_x, int p1_y, int p2_x, int p2_y
 	int pB_y = p2_y;
 	
 	// function
-	double gradientCost = sqrt((gradientx(A, pA_x, pA_y) - gradientx(B, pB_x, pB_y))**2 + (gradienty(A, pA_x, pA_y) - gradienty(B, pB_x, pB_y))**2)**2;
-	double intensityCost = 0.5*sqrt( (A->getPixel(pA_x, pA_y, 0) - B->getPixel(pB_x, pB_y, 0))**2 )**2;
+	double gradientCost = pow(sqrt(pow( gradientx(A, pA_x, pA_y) - gradientx(B, pB_x, pB_y),2) + pow( gradienty(A, pA_x, pA_y) - gradienty(B, pB_x, pB_y),2)),2);
+	double intensityCost = 0.5*pow(sqrt( pow(A->getPixel(pA_x, pA_y, 0) - B->getPixel(pB_x, pB_y, 0),2 )),2);
 	double totalCost = sqrt( (gradientCost + intensityCost) / ( stdDev(A, pA_x, pA_y) * stdDev(B, pB_x, pB_y) ) );
+	
+	return exp(totalCost)-1;
 }
 
 double gradientx(Image* img, int x, int y)
@@ -93,7 +95,7 @@ double stdDev(Image* image, int x, int y)
 	mean /= numNeighbors;
 	for (int i=0; i<8; i+=2) {
 		if (coord[i]>=0) {
-			stdDev += (image->getPixel(coord[i], coord[i+1], 0)-mean)**2;
+			stdDev += pow( image->getPixel(coord[i], coord[i+1], 0)-mean,2);
 		}
 	}
 	stdDev /= numNeighbors;
