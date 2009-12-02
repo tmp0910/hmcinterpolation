@@ -32,6 +32,9 @@
 #define I_GAUSSIAN	2
 #define KERNEL(W,H) (k[(W)+ksize*(H)])
 
+Image* ip_interpolate (const char* imageName1, const char* imageName2, double inter);
+double gradientx(Image* img, int x, int y);
+double gradienty(Image* img, int x, int y);
 Image*  interpolate (Image* i1, Image* i2, double alpha);
 Image*  convolute (Image* src, double* k, int ksize);
 double  resample (Image* src, double w, double h, int chan, int mode, int size, double sigma);
@@ -43,7 +46,6 @@ Image*	ip_brighten (Image* src, double alpha);
 Image*	ip_contrast (Image* src, double alpha);
 Image*	ip_composite (Image* src, const char* imageName, 
 					  const char* maskName);
-Image* ip_interpolate (const char* imageName1, const char* imageName2, double inter);
 Image*	ip_crop (Image* src, int x0, int y0, int x1, int y1);
 Image*	ip_edge_detect (Image* src);
 Image*	ip_extract (Image* src, int channel);
