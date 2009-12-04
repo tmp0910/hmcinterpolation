@@ -49,6 +49,9 @@ Image* ip_interpolate (const char* imageName1, const char* imageName2, double in
 		t2->writeBMP(buffer2);
 	}
 	
+	cout << "should be perfect!\n result is " << correspondence(i1, i2, 3, 3, 29, 29) << endl;
+	cout << "no match!\n result is " << correspondence(i1, i1, 3, 3, 0, 0) << endl;
+	
 	Image* result = new Image(100,100);
 	return result;
 }
@@ -64,7 +67,9 @@ double correspondence(Image* A, Image* B, int p1_x, int p1_y, int p2_x, int p2_y
 	double gradientCost = pow(sqrt(pow( gradientx(A, pA_x, pA_y) - gradientx(B, pB_x, pB_y),2) + pow( gradienty(A, pA_x, pA_y) - gradienty(B, pB_x, pB_y),2)),2);
 	double intensityCost = 0.5*pow(sqrt( pow(A->getPixel(pA_x, pA_y, 0) - B->getPixel(pB_x, pB_y, 0),2 )),2);
 	double totalCost = sqrt( (gradientCost + intensityCost) / ( stdDev(A, pA_x, pA_y) * stdDev(B, pB_x, pB_y) ) );
-	
+	cout << gradientCost << endl;
+	cout << intensityCost << endl;
+	cout << totalCost << endl;
 	return exp(totalCost)-1;
 }
 
@@ -99,7 +104,8 @@ double stdDev(Image* image, int x, int y)
 		}
 	}
 	stdDev /= numNeighbors;
-	return sqrt(stdDev);
+	stdDev = sqrt(stdDev); // got the STDDEV of neighbors
+	return (image->getPixel(x, y, 0)-mean)/stdDev;
 }	
 
 double gradienty(Image* img, int x, int y)
