@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <math.h>
 #include <vector>
-
+#include <queue>
 
 Image* ip_interpolate (const char* imageName1, const char* imageName2, double inter)
 {
@@ -54,6 +54,58 @@ Image* ip_interpolate (const char* imageName1, const char* imageName2, double in
 	
 	Image* result = new Image(100,100);
 	return result;
+}
+
+#define ij(X,Y) ((X)+SIZE*(Y))
+
+// findPath takes a source and destination image, the paths of the layer one smaller, and a vector of the same size
+void findPath(Image* src, Image* dst, vector<Path*>* smallerMap, vector<Path*>* newMap)
+{
+	int SIZE = src->getHeight();
+	// Assume newMap is initialized for now to random points
+	
+	// Add all pixels to calculation queue
+	queue<XY*> calcQueue;
+	XY* tmpXY;
+	for (int i = 0; i < SIZE; i++) {
+		for (int j = 0; j < SIZE; j++) {
+			tmpXY = new XY();
+			tmpXY->x = i;
+			tmpXY->y = j;
+			calcQueue.push(tmpXY);
+		}
+	}
+	
+	// Create calculation storage data structure
+	//   Each pixel has 4 possible end locations, so we need to store that
+	vector<double> calcStore(SIZE*SIZE*4);
+	
+	while (true) {
+		// Empty queue to calculate and find the best move
+		XY bestSrc;
+		XY bestDst;
+		while (!calcQueue.empty())
+		{
+			XY* pt = calcQueue.front();
+			calcQueue.pop();
+			
+			int x = pt->x;
+			int y = pt->y;
+			
+			double baseline = energy(src, dst, x, y, (*newMap)[ij(x,y)]);
+			
+			// Next calculate what kind of changes we can achieve with each of the 4 choices
+		}
+		
+		// If there is a good move, make the change using that move
+		
+		// Add affected pixels to the calculation queue
+	}
+}
+
+double energy(Image* src, Image* dst, int x, int y, Path* p)
+{
+	return 0;
 }
 
 double correspondence(Image* A, Image* B, int p1_x, int p1_y, int p2_x, int p2_y)

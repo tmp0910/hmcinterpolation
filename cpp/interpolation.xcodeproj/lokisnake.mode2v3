@@ -216,11 +216,11 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>89DA281A10C66A5C000EF81F</string>
+						<string>89A0927710CC7C290071A8D0</string>
 						<key>history</key>
 						<array>
-							<string>89DA27EA10C66603000EF81F</string>
-							<string>89DA27E210C662EE000EF81F</string>
+							<string>89A0927510CC7C290071A8D0</string>
+							<string>89A0927610CC7C290071A8D0</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -236,7 +236,7 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>317 104 653 674 0 0 1280 778 </string>
+				<string>858 504 653 674 0 0 1920 1178 </string>
 			</dict>
 		</dict>
 		<dict>
@@ -257,10 +257,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>89DA281B10C66A5C000EF81F</string>
+						<string>89A0927810CC7C290071A8D0</string>
 						<key>history</key>
 						<array>
-							<string>89DA279E10C6398B000EF81F</string>
+							<string>89DA281B10C66A5C000EF81F</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -276,7 +276,7 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>38 104 653 674 0 0 1280 778 </string>
+				<string>77 504 653 674 0 0 1920 1178 </string>
 			</dict>
 		</dict>
 		<dict>
@@ -297,10 +297,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>89DA281C10C66A5C000EF81F</string>
+						<string>89A0927910CC7C290071A8D0</string>
 						<key>history</key>
 						<array>
-							<string>89DA27A810C63B6B000EF81F</string>
+							<string>89DA281C10C66A5C000EF81F</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -316,7 +316,7 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>15 271 750 502 0 0 1280 778 </string>
+				<string>33 662 750 502 0 0 1920 1178 </string>
 			</dict>
 		</dict>
 		<dict>
@@ -337,10 +337,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>89DA281D10C66A5C000EF81F</string>
+						<string>89A0927A10CC7C290071A8D0</string>
 						<key>history</key>
 						<array>
-							<string>89497FD910C37D1C0081966F</string>
+							<string>89DA281D10C66A5C000EF81F</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -356,7 +356,7 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>42 97 653 674 0 0 1280 778 </string>
+				<string>85 439 653 674 0 0 1920 1178 </string>
 			</dict>
 		</dict>
 		<dict>
@@ -377,10 +377,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>89DA281E10C66A5C000EF81F</string>
+						<string>89A0927B10CC7C290071A8D0</string>
 						<key>history</key>
 						<array>
-							<string>89497FDA10C37D1C0081966F</string>
+							<string>89DA281E10C66A5C000EF81F</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -396,7 +396,7 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>232 99 653 674 0 0 1280 778 </string>
+				<string>469 457 653 674 0 0 1920 1178 </string>
 			</dict>
 		</dict>
 	</array>
@@ -500,7 +500,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>834 359 446 419 0 0 1280 778 </string>
+								<string>1474 759 446 419 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -638,8 +638,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>89DA278E10C6376E000EF81F</string>
-				<string>89DA278F10C6376E000EF81F</string>
+				<string>89A0923410CB765F0071A8D0</string>
+				<string>89A0923510CB765F0071A8D0</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -676,20 +676,16 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>89DA279610C6376F000EF81F</string>
-		<string>89DA279710C6376F000EF81F</string>
-		<string>1C530D54069F1CE1000CFCEE</string>
 		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>89497F9810C33C020081966F</string>
 		<string>89497F9510C33C020081966F</string>
 		<string>/Users/lokisnake/projects/hmcinterpolation/cpp/interpolation.xcodeproj</string>
 		<string>89DA27A610C63B6B000EF81F</string>
-		<string>1C530D5B069F1CE1000CFCEE</string>
 		<string>89DA27AC10C63B6B000EF81F</string>
 		<string>89497F9B10C33C020081966F</string>
 	</array>
 	<key>WindowString</key>
-	<string>834 359 446 419 0 0 1280 778 </string>
+	<string>1474 759 446 419 0 0 1920 1178 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
@@ -856,7 +852,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {500, 118}}</string>
 								<key>RubberWindowFrame</key>
-								<string>304 299 500 440 0 0 1280 778 </string>
+								<string>553 644 500 440 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -882,7 +878,7 @@
 								<key>Frame</key>
 								<string>{{0, 123}, {500, 276}}</string>
 								<key>RubberWindowFrame</key>
-								<string>304 299 500 440 0 0 1280 778 </string>
+								<string>553 644 500 440 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXBuildResultsModule</string>
@@ -905,7 +901,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>89DA278610C63768000EF81F</string>
+				<string>89A0923B10CB765F0071A8D0</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -914,7 +910,7 @@
 			<key>WindowContentMinSize</key>
 			<string>486 300</string>
 			<key>WindowString</key>
-			<string>304 299 500 440 0 0 1280 778 </string>
+			<string>553 644 500 440 0 0 1920 1178 </string>
 			<key>WindowToolGUID</key>
 			<string>1C530D52069F1CE1000CFCEE</string>
 			<key>WindowToolIsVisible</key>
