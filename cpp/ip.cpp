@@ -92,6 +92,7 @@ void findPath(Image* src, Image* dst, vector<Path*>* smallerMap, vector<Path*>* 
 			int x = pt->x;
 			int y = pt->y;
 			
+			// First find the baseline for this pixel
 			double baseline = energy(src, dst, x, y, (*newMap)[ij(x,y)]);
 			
 			// Next calculate what kind of changes we can achieve with each of the 4 choices
