@@ -1,0 +1,4 @@
+syntax: glob
+
+cpp/build
+cpp/interpolation.xcodeproj/lokisnake.*
