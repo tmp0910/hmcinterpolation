@@ -51,8 +51,8 @@ Image* ip_interpolate (const char* imageName1, const char* imageName2, double in
 		t2->writeBMP(buffer2);
 	}
 	
-	cout << "should be perfect!\n result is " << correspondence(i1, i2, 3, 3, 29, 29) << endl;
-	cout << "no match!\n result is " << correspondence(i1, i1, 3, 3, 0, 0) << endl;
+	//cout << "should be perfect!\n result is " << correspondence(i1, i2, 3, 3, 29, 29) << endl;
+	//cout << "no match!\n result is " << correspondence(i1, i1, 3, 3, 0, 0) << endl;
 	
 	Image* result = new Image(100,100);
 	return result;
@@ -106,17 +106,34 @@ void findPath(Image* src, Image* dst, vector<Path*>* smallerMap, vector<Path*>* 
 	}
 }
 
-double energy(Image* src, Image* dst, int x, int y, Path* p)
+// calculating the relevant energy portions for a change of path for a particular pixel
+double energy(Image* src, Image* dst, int x, int y, vector<Path*>* originalPaths, Path* path)
 {
-	return 0;
+	double correspondenceCost = correspondence(src, dst, x, y, path);
+	double coherencyCost = 0;
+	int SIZE = src->getHeight();
+	
+	//TODO: write separate neighbors function
+	// neighbors code
+	double coord[] = {x, y-1, x-1, y, x+1, y, x, y+1};
+	
+	for (int i =0; i<8; i+=2) {
+		if (coord[i] >= 0 and coord[i] < SIZE and coord[i+1] >= 0 and coord[i+1] < SIZE) { //if neighbor is valid
+			coherencyCost += coherency(path, (*originalPaths)[ ij(coord[i], coord[i+1]) ]); //compute coherency
+		}
+	}
+	
+	return correspondenceCost + 2*coherencyCost;
 }
 
-double correspondence(Image* A, Image* B, int p1_x, int p1_y, int p2_x, int p2_y)
+double correspondence(Image* A, Image* B, int x, int y, Path* path)
 {
-	int pA_x = p1_x;
-	int pA_y = p1_y;
-	int pB_x = p2_x;
-	int pB_y = p2_y;
+	XY vectorA = path->a;
+	XY vectorB = path->b;
+	int pA_x = x + vectorA.x;
+	int pA_y = y + vectorA.y;
+	int pB_x = x - vectorB.x;
+	int pB_y = y - vectorB.y;
 	
 	// function
 	double gradientCost = pow(sqrt(pow( gradientx(A, pA_x, pA_y) - gradientx(B, pB_x, pB_y),2) + pow( gradienty(A, pA_x, pA_y) - gradienty(B, pB_x, pB_y),2)),2);
@@ -139,6 +156,9 @@ double stdDev(Image* image, int x, int y)
 	double stdDev = 0;
 	double mean = 0;
 	double numNeighbors = 0;
+	
+	//TODO: write separate neighbors function
+	//neighbors code
 	double coord[] = {x, y-1, x-1, y, x+1, y, x, y+1};
 	
 	for (int i =0; i<8; i+=2) {
