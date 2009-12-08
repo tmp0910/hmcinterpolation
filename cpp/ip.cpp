@@ -93,12 +93,12 @@ Image* ip_interpolate (const char* imageName1, const char* imageName2, double in
 				interVal = 1 - ((interVal - length_a) / length_b);
 				double xVal = -path.b.x * interVal + x;
 				double yVal = -path.b.y * interVal + y;
-				result->setPixel(x, y, 0, resample(i2, xVal, yVal, 0, I_BILINEAR, 0, 0));
+				result->setPixel(x, y, 0, clamp(resample(i2, xVal, yVal, 0, I_BILINEAR, 0, 0), 0, 1));
 			}
 			else {
 				double xVal = path.a.x * (interVal/length_a);
 				double yVal = path.a.y * (interVal/length_a);
-				result->setPixel(x, y, 0, resample(i1, xVal, yVal, 0, I_BILINEAR, 0, 0));
+				result->setPixel(x, y, 0, clamp(resample(i1, xVal, yVal, 0, I_BILINEAR, 0, 0), 0, 1));
 			}
 
 		}
@@ -369,9 +369,9 @@ double correspondence(Image* A, Image* B, int x, int y, Path* path)
 	double gradientCost = pow(sqrt(pow( gradientx(A, pA_x, pA_y) - gradientx(B, pB_x, pB_y),2) + pow( gradienty(A, pA_x, pA_y) - gradienty(B, pB_x, pB_y),2)),2);
 	double intensityCost = 0.5*pow(sqrt( pow(A->getPixel(pA_x, pA_y, 0) - B->getPixel(pB_x, pB_y, 0),2 )),2);
 	double totalCost = sqrt( (gradientCost + intensityCost) / ( stdDev(A, pA_x, pA_y) * stdDev(B, pB_x, pB_y) ) );
-	cout << gradientCost << endl;
-	cout << intensityCost << endl;
-	cout << totalCost << endl;
+//	cout << gradientCost << endl;
+//	cout << intensityCost << endl;
+//	cout << totalCost << endl;
 	return exp(totalCost)-1;
 }
 
