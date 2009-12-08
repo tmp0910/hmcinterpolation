@@ -45,8 +45,8 @@ struct Path {
 Image* ip_interpolate (const char* imageName1, const char* imageName2, double inter);
 double gradientx(Image* img, int x, int y);
 double gradienty(Image* img, int x, int y);
-double energy(Image* src, Image* dst, int x, int y, Path* p);
-double correspondence(Image* A, Image* B, int p1_x, int p1_y, int p2_x, int p2_y);
+double energy(Image* src, Image* dst, int x, int y, vector<Path*>* originalPaths, Path* path);
+double correspondence(Image* A, Image* B, int x, int y, Path* path);
 double stdDev(Image* image, int x, int y);
 Image*  interpolate (Image* i1, Image* i2, double alpha);
 Image*  convolute (Image* src, double* k, int ksize);
