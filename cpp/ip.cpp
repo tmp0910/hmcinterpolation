@@ -66,6 +66,25 @@ void findPath(Image* src, Image* dst, vector<Path*>* smallerMap, vector<Path*>* 
 	int SIZE = src->getHeight();
 	// Assume newMap is initialized for now to random points
 	// TODO: initialize newMap
+	for (int x=0; x<SIZE; x++) {
+		for (int y=0; y<SIZE; y++) {
+			// for every pixel, push a plausible path based from the smallerMap
+			Path* oldPath = (*smallerMap)[ ij(x/2,y/2) ];
+			Path newPath;
+			newPath.a.x = 2*oldPath->a.x + rand()%2;
+			newPath.a.y = 2*oldPath->a.y + rand()%2;
+			newPath.b.x = 2*oldPath->b.x + rand()%2;
+			newPath.b.y = 2*oldPath->b.y + rand()%2;
+			while (!validPath(&newPath)) {
+				
+				newPath.a.x = 2*oldPath->a.x + rand()%2;
+				newPath.a.y = 2*oldPath->a.y + rand()%2;
+				newPath.b.x = 2*oldPath->b.x + rand()%2;
+				newPath.b.y = 2*oldPath->b.y + rand()%2;
+			}
+			(*newMap).push_back(&newPath);
+		}
+	}
 	
 	// Add all pixels to calculation queue
 	queue<XY*> calcQueue;
@@ -237,6 +256,23 @@ void findPath(Image* src, Image* dst, vector<Path*>* smallerMap, vector<Path*>* 
 		}
 		// Add affected pixels to the calculation queue
 	}
+}
+
+bool validPath(Path* path)
+{	// dot product is 1 or -1
+	XY a = path->a;
+	XY b = path->b;
+	
+	double dotSum = a.x*b.x + a.y*b.y;
+	double magnitudeA = sqrt( pow(a.x, 2) + pow(a.y, 2) );
+	double magnitudeB = sqrt( pow(b.x, 2) + pow(b.y, 2) );
+	
+	double dotProduct = dotSum/(magnitudeA * magnitudeB);
+	
+	if (dotProduct == 1 or dotProduct == -1) {
+		return true;
+	}
+	return false;
 }
 
 // calculating the relevant energy portions for a change of path for a particular pixel
