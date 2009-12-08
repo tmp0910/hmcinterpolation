@@ -85,9 +85,6 @@ void findPath(Image* src, Image* dst, vector<Path*>* smallerMap, vector<Path*>* 
 	
 	while (true) {
 		// Empty queue to calculate and find the best move
-		XY bestSrc;
-		XY bestDst;
-		double bestImprovement = 0;
 		while (!calcQueue.empty())
 		{
 			XY* pt = calcQueue.front();
@@ -101,140 +98,78 @@ void findPath(Image* src, Image* dst, vector<Path*>* smallerMap, vector<Path*>* 
 			double baseline = energy(src, dst, x, y, orig);
 			
 			Path choices;
-			choices.a.x = orig->a.x;
-			choices.a.y = orig->a.y;
+			choices.a.x = orig->a.x/2*2;
+			choices.a.y = orig->a.y/2*2;
 			choices.b.x = orig->b.x/2*2;
 			choices.b.y = orig->b.y/2*2;
 			
 			// Next calculate what kind of changes we can achieve with each of the 16 choices
+			if (
 			calcStore[ij(x,y)*16] = energy(src, dst, x, y, &choices);
-			if (baseline - calcStore[ij(x,y)*16] > bestImprovement) {
-				bestSrc = choices.a;
-				bestDst = choices.b;
-				bestImprovement = baseline - calcStore[ij(x,y)*16];
-			}
 			choices.b.x += 1;
 			calcStore[ij(x,y)*16+1] = energy(src, dst, x, y, &choices);
-			if (baseline - calcStore[ij(x,y)*16+1] > bestImprovement) {
-				bestSrc = choices.a;
-				bestDst = choices.b;
-				bestImprovement = baseline - calcStore[ij(x,y)*16+1];
-			}
 			choices.b.x -= 1;
 			choices.b.y += 1;
 			calcStore[ij(x,y)*16+2] = energy(src, dst, x, y, &choices);
-			if (baseline - calcStore[ij(x,y)*16+2] > bestImprovement) {
-				bestSrc = choices.a;
-				bestDst = choices.b;
-				bestImprovement = baseline - calcStore[ij(x,y)*16+2];
-			}
 			choices.b.x += 1;
 			calcStore[ij(x,y)*16+3] = energy(src, dst, x, y, &choices);
-			if (baseline - calcStore[ij(x,y)*16+3] > bestImprovement) {
-				bestSrc = choices.a;
-				bestDst = choices.b;
-				bestImprovement = baseline - calcStore[ij(x,y)*16+3];
-			}
 			
+			choices.b.x -= 1;
+			choices.b.y -= 1;
 			choices.a.x += 1;
 			
 			calcStore[ij(x,y)*16+4] = energy(src, dst, x, y, &choices);
-			if (baseline - calcStore[ij(x,y)*16+4] > bestImprovement) {
-				bestSrc = choices.a;
-				bestDst = choices.b;
-				bestImprovement = baseline - calcStore[ij(x,y)*16+4];
-			}
 			choices.b.x += 1;
 			calcStore[ij(x,y)*16+4+1] = energy(src, dst, x, y, &choices);
-			if (baseline - calcStore[ij(x,y)*16+4+1] > bestImprovement) {
-				bestSrc = choices.a;
-				bestDst = choices.b;
-				bestImprovement = baseline - calcStore[ij(x,y)*16+4+1];
-			}
 			choices.b.x -= 1;
 			choices.b.y += 1;
 			calcStore[ij(x,y)*16+4+2] = energy(src, dst, x, y, &choices);
-			if (baseline - calcStore[ij(x,y)*16+4+2] > bestImprovement) {
-				bestSrc = choices.a;
-				bestDst = choices.b;
-				bestImprovement = baseline - calcStore[ij(x,y)*16+4+2];
-			}
 			choices.b.x += 1;
 			calcStore[ij(x,y)*16+4+3] = energy(src, dst, x, y, &choices);
-			if (baseline - calcStore[ij(x,y)*16+4+3] > bestImprovement) {
-				bestSrc = choices.a;
-				bestDst = choices.b;
-				bestImprovement = baseline - calcStore[ij(x,y)*16+4+3];
-			}
 			
+			choices.b.x -= 1;
+			choices.b.y -= 1;
 			choices.a.x -= 1;
 			choices.a.y += 1;
 			
 			calcStore[ij(x,y)*16+8] = energy(src, dst, x, y, &choices);
-			if (baseline - calcStore[ij(x,y)*16+8] > bestImprovement) {
-				bestSrc = choices.a;
-				bestDst = choices.b;
-				bestImprovement = baseline - calcStore[ij(x,y)*16+8];
-			}
 			choices.b.x += 1;
 			calcStore[ij(x,y)*16+8+1] = energy(src, dst, x, y, &choices);
-			if (baseline - calcStore[ij(x,y)*16+8+1] > bestImprovement) {
-				bestSrc = choices.a;
-				bestDst = choices.b;
-				bestImprovement = baseline - calcStore[ij(x,y)*16+8+1];
-			}
 			choices.b.x -= 1;
 			choices.b.y += 1;
 			calcStore[ij(x,y)*16+8+2] = energy(src, dst, x, y, &choices);
-			if (baseline - calcStore[ij(x,y)*16+8+2] > bestImprovement) {
-				bestSrc = choices.a;
-				bestDst = choices.b;
-				bestImprovement = baseline - calcStore[ij(x,y)*16+8+2];
-			}
 			choices.b.x += 1;
 			calcStore[ij(x,y)*16+8+3] = energy(src, dst, x, y, &choices);
-			if (baseline - calcStore[ij(x,y)*16+8+3] > bestImprovement) {
-				bestSrc = choices.a;
-				bestDst = choices.b;
-				bestImprovement = baseline - calcStore[ij(x,y)*16+8+3];
-			}
 			
+			choices.b.x -= 1;
+			choices.b.y -= 1;
 			choices.a.x += 1;
 			
 			calcStore[ij(x,y)*16+12] = energy(src, dst, x, y, &choices);
-			if (baseline - calcStore[ij(x,y)*16+12] > bestImprovement) {
-				bestSrc = choices.a;
-				bestDst = choices.b;
-				bestImprovement = baseline - calcStore[ij(x,y)*16+12];
-			}
 			choices.b.x += 1;
 			calcStore[ij(x,y)*16+12+1] = energy(src, dst, x, y, &choices);
-			if (baseline - calcStore[ij(x,y)*16+12+1] > bestImprovement) {
-				bestSrc = choices.a;
-				bestDst = choices.b;
-				bestImprovement = baseline - calcStore[ij(x,y)*16+12+1];
-			}
 			choices.b.x -= 1;
 			choices.b.y += 1;
 			calcStore[ij(x,y)*16+12+2] = energy(src, dst, x, y, &choices);
-			if (baseline - calcStore[ij(x,y)*16+12+2] > bestImprovement) {
-				bestSrc = choices.a;
-				bestDst = choices.b;
-				bestImprovement = baseline - calcStore[ij(x,y)*16+12+2];
-			}
 			choices.b.x += 1;
 			calcStore[ij(x,y)*16+12+3] = energy(src, dst, x, y, &choices);
-			if (baseline - calcStore[ij(x,y)*16+12+3] > bestImprovement) {
-				bestSrc = choices.a;
-				bestDst = choices.b;
-				bestImprovement = baseline - calcStore[ij(x,y)*16+12+3];
-			}
 		}
 		
 		// If there is a good move, make the change using that move
-		if (false) {
-			cout << endl;
+		XY bestSrc;
+		XY bestDst;
+		double bestImprovement = 0;
+		
+		for (int i = 0; i < SIZE; i++) {
+			for (int j = 0; j < SIZE; j++) {
+				for (int k = 0; k < 16; k++) {
+					if (<#condition#>) {
+						<#statements#>
+					}
+				}
+			}
 		}
+		
 		// Add affected pixels to the calculation queue
 	}
 }
@@ -964,7 +899,7 @@ int[] energy_minimization (int[][] energyArray)
  * The neighboring pixels can still have arbitrary transition points 
  * very different from each other.
  */
-double coherency(Path forPixel, Path forNeighbor)
+double coherency(Path* forPixel, Path* forNeighbor)
 {
 	// Discontinuity preserving threshold 
 	// Various sample values for examples in the paper are shown in Figure 11
@@ -978,17 +913,17 @@ double coherency(Path forPixel, Path forNeighbor)
 	XY forNeighborA = forNeighbor->a;
 	XY forNeighborB = forNeighbor->b;
 	
-	int pixelAX = forPixelA->x;
-	int pixelAY = forPixelA->y;
+	int pixelAX = forPixelA.x;
+	int pixelAY = forPixelA.y;
 
-	int pixelBX = forPixelB->x;
-	int pixelBY = forPixelB->y;
+	int pixelBX = forPixelB.x;
+	int pixelBY = forPixelB.y;
 
-	int neighborAX = forNeighborA->x;
-	int neighborAY = forNeighborA->y;
+	int neighborAX = forNeighborA.x;
+	int neighborAY = forNeighborA.y;
 
-	int neighborBX = forNeighborB->x;
-	int neighborBY = forNeighborB->y;
+	int neighborBX = forNeighborB.x;
+	int neighborBY = forNeighborB.y;
 
 	int partX = pixelAX + pixelBX;
 	int partY = pixelAY + pixelBY;
