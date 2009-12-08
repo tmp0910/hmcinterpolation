@@ -7,6 +7,8 @@
 #include <vector>
 #include <queue>
 
+double MAX_DOUBLE = 1.79769e+308;
+
 Image* ip_interpolate (const char* imageName1, const char* imageName2, double inter)
 {
 	cout << imageName1 << endl;
@@ -144,7 +146,7 @@ double stdDev(Image* image, int x, int y)
 			mean += image->getPixel(coord[i], coord[i+1], 0);
 			numNeighbors += 1;
 		}
-		else {
+		else { // set the coordinates to be invalid
 			coord[i] = -1;
 			coord[i+1] = -1;
 		}
@@ -152,14 +154,31 @@ double stdDev(Image* image, int x, int y)
 	}
 	mean /= numNeighbors;
 	for (int i=0; i<8; i+=2) {
-		if (coord[i]>=0) {
+		if (coord[i]>=0) { // check if the coordinates are in the image
 			stdDev += pow( image->getPixel(coord[i], coord[i+1], 0)-mean,2);
 		}
 	}
 	stdDev /= numNeighbors;
 	stdDev = sqrt(stdDev); // got the STDDEV of neighbors
-	return (image->getPixel(x, y, 0)-mean)/stdDev;
-}	
+	
+	double valueDifference = image->getPixel(x, y, 0) - mean; // difference b/w pixel and mean value of neighbors
+	
+	// numDevAway is the number of deviations the pixel is from its neighbors
+	double numDevAway = valueDifference / stdDev;
+	
+	if (valueDifference == 0) { // if pixel is the same as mean of neighbors,
+		numDevAway = 0; // then it is 0 deviations away
+	}
+	else if (stdDev == 0) { // handling divide by 0 case
+		numDevAway = MAX_DOUBLE; // TODO: some kind of scaling proportional to the valueDifference
+	}
+	if (numDevAway < 0) { // ensure numDevAway is positive
+		numDevAway = -numDevAway;
+	}
+	return numDevAway;
+}
+
+
 
 double gradienty(Image* img, int x, int y)
 {	
