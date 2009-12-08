@@ -7,7 +7,14 @@
 #include <vector>
 #include <queue>
 
+#define ij(X,Y) ((X)+SIZE*(Y))
+
 double MAX_DOUBLE = 1.79769e+308;
+
+double lengthXY(XY xy)
+{
+	return sqrt((xy.x*xy.x)+(xy.y*xy.y));
+}
 
 Image* ip_interpolate (const char* imageName1, const char* imageName2, double inter)
 {
@@ -57,12 +64,13 @@ Image* ip_interpolate (const char* imageName1, const char* imageName2, double in
 	initPath.a.y = 0;
 	initPath.b.x = 0;
 	initPath.b.y = 0;
-	vector<Path>* prevMap(1, initPath);
+	vector<Path>* prevMap = new vector<Path>(1, initPath);
 	vector<Path>* newMap;
 	vector<Image*>::reverse_iterator rit_a = p1.rbegin();
 	vector<Image*>::reverse_iterator rit_b = p2.rbegin();
 	for ( ; rit_b < p2.rend(); ++rit_a, ++rit_b) {
-		newMap = new vector<Path>((*rit_b->getHeight()) * (*rit_b->getHeight())); 
+		cout << "doing comp! " << (*rit_a)->getHeight() << endl;
+		newMap = new vector<Path>((*rit_b)->getHeight() * (*rit_b)->getHeight()); 
 		findPath(*rit_a, *rit_b, prevMap, newMap);
 		prevMap = newMap;
 	}
@@ -71,7 +79,7 @@ Image* ip_interpolate (const char* imageName1, const char* imageName2, double in
 	//cout << "no match!\n result is " << correspondence(i1, i1, 3, 3, 0, 0) << endl;
 	
 	int SIZE = i1->getHeight();
-	Image* result = new Image(SIZE, SIZE);
+	Image* result = new Image(SIZE, SIZE, 1);
 
 	for (int x = 0; x < SIZE; ++x) {
 		for (int y = 0; y < SIZE; ++y) {
@@ -85,10 +93,12 @@ Image* ip_interpolate (const char* imageName1, const char* imageName2, double in
 				interVal = 1 - ((interVal - length_a) / length_b);
 				double xVal = -path.b.x * interVal + x;
 				double yVal = -path.b.y * interVal + y;
+				result->setPixel(x, y, 0, resample(i2, xVal, yVal, 0, I_BILINEAR, 0, 0));
 			}
 			else {
 				double xVal = path.a.x * (interVal/length_a);
 				double yVal = path.a.y * (interVal/length_a);
+				result->setPixel(x, y, 0, resample(i1, xVal, yVal, 0, I_BILINEAR, 0, 0));
 			}
 
 		}
@@ -96,8 +106,6 @@ Image* ip_interpolate (const char* imageName1, const char* imageName2, double in
 
 	return result;
 }
-
-#define ij(X,Y) ((X)+SIZE*(Y))
 
 // findPath takes a source and destination image, the paths of the layer one smaller, and a vector of the same size
 void findPath(Image* src, Image* dst, vector<Path>* smallerMap, vector<Path>* newMap)
@@ -107,7 +115,7 @@ void findPath(Image* src, Image* dst, vector<Path>* smallerMap, vector<Path>* ne
 	for (int x=0; x<SIZE; x++) {
 		for (int y=0; y<SIZE; y++) {
 			// for every pixel, push a plausible path based from the smallerMap
-			Path* oldPath = &((*smallerMap)[ ij(x/2,y/2) ]);
+			Path* oldPath = &((*smallerMap)[ x/2+(y/2*SIZE/2) ]);
 			Path* newPath = &((*newMap)[ij(x,y)]);
 			newPath->a.x = 2*oldPath->a.x + rand()%2;
 			newPath->a.y = 2*oldPath->a.y + rand()%2;
@@ -117,8 +125,8 @@ void findPath(Image* src, Image* dst, vector<Path>* smallerMap, vector<Path>* ne
 				
 				newPath->a.x = 2*oldPath->a.x + rand()%2;
 				newPath->a.y = 2*oldPath->a.y + rand()%2;
-				newPath->b.x = 2*oldPath->b.x + rand()%2;
-				newPath->b.y = 2*oldPath->b.y + rand()%2;
+				newPath->b.x = 2*oldPath->b.x - rand()%2;
+				newPath->b.y = 2*oldPath->b.y - rand()%2;
 			}
 		}
 	}
@@ -169,50 +177,50 @@ void findPath(Image* src, Image* dst, vector<Path>* smallerMap, vector<Path>* ne
 				calcStore[ij(x,y)*16] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16] = choices;
 			}
-			choices.b.x += 1;
+			choices.b.x += -1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+1] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+1] = choices;
 			}
-			choices.b.x -= 1;
-			choices.b.y += 1;
+			choices.b.x -= -1;
+			choices.b.y += -1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+2] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+2] = choices;
 			}
-			choices.b.x += 1;
+			choices.b.x += -1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+3] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+3] = choices;
 			}
 			
-			choices.b.x -= 1;
-			choices.b.y -= 1;
+			choices.b.x -= -1;
+			choices.b.y -= -1;
 			choices.a.x += 1;
 			
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+4] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+4] = choices;
 			}
-			choices.b.x += 1;
+			choices.b.x += -1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+4+1] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+4+1] = choices;
 			}
-			choices.b.x -= 1;
-			choices.b.y += 1;
+			choices.b.x -= -1;
+			choices.b.y += -1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+4+2] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+4+2] = choices;
 			}
-			choices.b.x += 1;
+			choices.b.x += -1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+4+3] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+4+3] = choices;
 			}
 			
-			choices.b.x -= 1;
-			choices.b.y -= 1;
+			choices.b.x -= -1;
+			choices.b.y -= -1;
 			choices.a.x -= 1;
 			choices.a.y += 1;
 			
@@ -220,43 +228,43 @@ void findPath(Image* src, Image* dst, vector<Path>* smallerMap, vector<Path>* ne
 				calcStore[ij(x,y)*16+8] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+8] = choices;
 			}
-			choices.b.x += 1;
+			choices.b.x += -1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+8+1] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+8+1] = choices;
 			}
-			choices.b.x -= 1;
-			choices.b.y += 1;
+			choices.b.x -= -1;
+			choices.b.y += -1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+8+2] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+8+2] = choices;
 			}
-			choices.b.x += 1;
+			choices.b.x += -1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+8+3] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+8+3] = choices;
 			}
 			
-			choices.b.x -= 1;
-			choices.b.y -= 1;
+			choices.b.x -= -1;
+			choices.b.y -= -1;
 			choices.a.x += 1;
 			
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+12] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+12] = choices;
 			}
-			choices.b.x += 1;
+			choices.b.x += -1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+12+1] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+12+1] = choices;
 			}
-			choices.b.x -= 1;
-			choices.b.y += 1;
+			choices.b.x -= -1;
+			choices.b.y += -1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+12+2] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+12+2] = choices;
 			}
-			choices.b.x += 1;
+			choices.b.x += -1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+12+3] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+12+3] = choices;
@@ -320,7 +328,7 @@ bool validPath(Path* path)
 	
 	double dotProduct = dotSum/(magnitudeA * magnitudeB);
 	
-	if (dotProduct == 1 or dotProduct == -1) {
+	if (dotProduct == -1) {
 		return true;
 	}
 	return false;
@@ -352,9 +360,11 @@ double correspondence(Image* A, Image* B, int x, int y, Path* path)
 	XY vectorB = path->b;
 	int pA_x = x + vectorA.x;
 	int pA_y = y + vectorA.y;
-	int pB_x = x - vectorB.x;
-	int pB_y = y - vectorB.y;
-	
+	int pB_x = x + vectorB.x;
+	int pB_y = y + vectorB.y;
+	if (pA_x < 0 || pA_y < 0 || pB_x < 0 || pB_y < 0 || pA_x >= A->getHeight() || pA_y >= A->getHeight() || pB_x >= A->getHeight() || pB_y >= A->getHeight()) {
+		return MAX_DOUBLE;
+	}
 	// function
 	double gradientCost = pow(sqrt(pow( gradientx(A, pA_x, pA_y) - gradientx(B, pB_x, pB_y),2) + pow( gradienty(A, pA_x, pA_y) - gradienty(B, pB_x, pB_y),2)),2);
 	double intensityCost = 0.5*pow(sqrt( pow(A->getPixel(pA_x, pA_y, 0) - B->getPixel(pB_x, pB_y, 0),2 )),2);

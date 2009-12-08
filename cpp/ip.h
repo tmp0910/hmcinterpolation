@@ -43,6 +43,7 @@ struct Path {
 };
 
 Image* ip_interpolate (const char* imageName1, const char* imageName2, double inter);
+void findPath(Image* src, Image* dst, vector<Path>* smallerMap, vector<Path>* newMap);
 double gradientx(Image* img, int x, int y);
 double gradienty(Image* img, int x, int y);
 double energy(Image* src, Image* dst, int x, int y, vector<Path>* originalPaths, Path* path);
