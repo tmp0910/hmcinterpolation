@@ -65,24 +65,22 @@ void findPath(Image* src, Image* dst, vector<Path*>* smallerMap, vector<Path*>* 
 {
 	int SIZE = src->getHeight();
 	// Assume newMap is initialized for now to random points
-	// TODO: initialize newMap
 	for (int x=0; x<SIZE; x++) {
 		for (int y=0; y<SIZE; y++) {
 			// for every pixel, push a plausible path based from the smallerMap
 			Path* oldPath = (*smallerMap)[ ij(x/2,y/2) ];
-			Path newPath;
-			newPath.a.x = 2*oldPath->a.x + rand()%2;
-			newPath.a.y = 2*oldPath->a.y + rand()%2;
-			newPath.b.x = 2*oldPath->b.x + rand()%2;
-			newPath.b.y = 2*oldPath->b.y + rand()%2;
-			while (!validPath(&newPath)) {
+			Path* newPath = (*newMap)[ij(x,y)];
+			newPath->a.x = 2*oldPath->a.x + rand()%2;
+			newPath->a.y = 2*oldPath->a.y + rand()%2;
+			newPath->b.x = 2*oldPath->b.x + rand()%2;
+			newPath->b.y = 2*oldPath->b.y + rand()%2;
+			while (!validPath(newPath)) {
 				
-				newPath.a.x = 2*oldPath->a.x + rand()%2;
-				newPath.a.y = 2*oldPath->a.y + rand()%2;
-				newPath.b.x = 2*oldPath->b.x + rand()%2;
-				newPath.b.y = 2*oldPath->b.y + rand()%2;
+				newPath->a.x = 2*oldPath->a.x + rand()%2;
+				newPath->a.y = 2*oldPath->a.y + rand()%2;
+				newPath->b.x = 2*oldPath->b.x + rand()%2;
+				newPath->b.y = 2*oldPath->b.y + rand()%2;
 			}
-			(*newMap).push_back(&newPath);
 		}
 	}
 	
@@ -92,6 +90,12 @@ void findPath(Image* src, Image* dst, vector<Path*>* smallerMap, vector<Path*>* 
 	// Create calculation storage data structure
 	//   Each pixel has 4 possible end locations, so we need to store that
 	vector<double> calcStore(SIZE*SIZE*16);
+	Path tmpPath;
+	tmpPath.a.x = 10000;
+	tmpPath.a.y = 10000;
+	tmpPath.b.x = 10000;
+	tmpPath.b.y = 10000;
+	vector<Path> pathStore(SIZE*SIZE*16, tmpPath);
 	XY* tmpXY;
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
@@ -114,7 +118,6 @@ void findPath(Image* src, Image* dst, vector<Path*>* smallerMap, vector<Path*>* 
 			
 			// First find the baseline for this pixel
 			Path* orig = (*newMap)[ij(x,y)];
-			double baseline = energy(src, dst, x, y, orig);
 			
 			Path choices;
 			choices.a.x = orig->a.x/2*2;
@@ -123,73 +126,130 @@ void findPath(Image* src, Image* dst, vector<Path*>* smallerMap, vector<Path*>* 
 			choices.b.y = orig->b.y/2*2;
 			
 			// Next calculate what kind of changes we can achieve with each of the 16 choices
-			if (
-			calcStore[ij(x,y)*16] = energy(src, dst, x, y, &choices);
+			if (validPath(&choices)) {
+				calcStore[ij(x,y)*16] = energy(src, dst, x, y, newMap, &choices);
+				pathStore[ij(x,y)*16] = choices;
+			}
 			choices.b.x += 1;
-			calcStore[ij(x,y)*16+1] = energy(src, dst, x, y, &choices);
+			if (validPath(&choices)) {
+				calcStore[ij(x,y)*16+1] = energy(src, dst, x, y, newMap, &choices);
+				pathStore[ij(x,y)*16+1] = choices;
+			}
 			choices.b.x -= 1;
 			choices.b.y += 1;
-			calcStore[ij(x,y)*16+2] = energy(src, dst, x, y, &choices);
+			if (validPath(&choices)) {
+				calcStore[ij(x,y)*16+2] = energy(src, dst, x, y, newMap, &choices);
+				pathStore[ij(x,y)*16+2] = choices;
+			}
 			choices.b.x += 1;
-			calcStore[ij(x,y)*16+3] = energy(src, dst, x, y, &choices);
+			if (validPath(&choices)) {
+				calcStore[ij(x,y)*16+3] = energy(src, dst, x, y, newMap, &choices);
+				pathStore[ij(x,y)*16+3] = choices;
+			}
 			
 			choices.b.x -= 1;
 			choices.b.y -= 1;
 			choices.a.x += 1;
 			
-			calcStore[ij(x,y)*16+4] = energy(src, dst, x, y, &choices);
+			if (validPath(&choices)) {
+				calcStore[ij(x,y)*16+4] = energy(src, dst, x, y, newMap, &choices);
+				pathStore[ij(x,y)*16+4] = choices;
+			}
 			choices.b.x += 1;
-			calcStore[ij(x,y)*16+4+1] = energy(src, dst, x, y, &choices);
+			if (validPath(&choices)) {
+				calcStore[ij(x,y)*16+4+1] = energy(src, dst, x, y, newMap, &choices);
+				pathStore[ij(x,y)*16+4+1] = choices;
+			}
 			choices.b.x -= 1;
 			choices.b.y += 1;
-			calcStore[ij(x,y)*16+4+2] = energy(src, dst, x, y, &choices);
+			if (validPath(&choices)) {
+				calcStore[ij(x,y)*16+4+2] = energy(src, dst, x, y, newMap, &choices);
+				pathStore[ij(x,y)*16+4+2] = choices;
+			}
 			choices.b.x += 1;
-			calcStore[ij(x,y)*16+4+3] = energy(src, dst, x, y, &choices);
+			if (validPath(&choices)) {
+				calcStore[ij(x,y)*16+4+3] = energy(src, dst, x, y, newMap, &choices);
+				pathStore[ij(x,y)*16+4+3] = choices;
+			}
 			
 			choices.b.x -= 1;
 			choices.b.y -= 1;
 			choices.a.x -= 1;
 			choices.a.y += 1;
 			
-			calcStore[ij(x,y)*16+8] = energy(src, dst, x, y, &choices);
+			if (validPath(&choices)) {
+				calcStore[ij(x,y)*16+8] = energy(src, dst, x, y, newMap, &choices);
+				pathStore[ij(x,y)*16+8] = choices;
+			}
 			choices.b.x += 1;
-			calcStore[ij(x,y)*16+8+1] = energy(src, dst, x, y, &choices);
+			if (validPath(&choices)) {
+				calcStore[ij(x,y)*16+8+1] = energy(src, dst, x, y, newMap, &choices);
+				pathStore[ij(x,y)*16+8+1] = choices;
+			}
 			choices.b.x -= 1;
 			choices.b.y += 1;
-			calcStore[ij(x,y)*16+8+2] = energy(src, dst, x, y, &choices);
+			if (validPath(&choices)) {
+				calcStore[ij(x,y)*16+8+2] = energy(src, dst, x, y, newMap, &choices);
+				pathStore[ij(x,y)*16+8+2] = choices;
+			}
 			choices.b.x += 1;
-			calcStore[ij(x,y)*16+8+3] = energy(src, dst, x, y, &choices);
+			if (validPath(&choices)) {
+				calcStore[ij(x,y)*16+8+3] = energy(src, dst, x, y, newMap, &choices);
+				pathStore[ij(x,y)*16+8+3] = choices;
+			}
 			
 			choices.b.x -= 1;
 			choices.b.y -= 1;
 			choices.a.x += 1;
 			
-			calcStore[ij(x,y)*16+12] = energy(src, dst, x, y, &choices);
+			if (validPath(&choices)) {
+				calcStore[ij(x,y)*16+12] = energy(src, dst, x, y, newMap, &choices);
+				pathStore[ij(x,y)*16+12] = choices;
+			}
 			choices.b.x += 1;
-			calcStore[ij(x,y)*16+12+1] = energy(src, dst, x, y, &choices);
+			if (validPath(&choices)) {
+				calcStore[ij(x,y)*16+12+1] = energy(src, dst, x, y, newMap, &choices);
+				pathStore[ij(x,y)*16+12+1] = choices;
+			}
 			choices.b.x -= 1;
 			choices.b.y += 1;
-			calcStore[ij(x,y)*16+12+2] = energy(src, dst, x, y, &choices);
+			if (validPath(&choices)) {
+				calcStore[ij(x,y)*16+12+2] = energy(src, dst, x, y, newMap, &choices);
+				pathStore[ij(x,y)*16+12+2] = choices;
+			}
 			choices.b.x += 1;
-			calcStore[ij(x,y)*16+12+3] = energy(src, dst, x, y, &choices);
+			if (validPath(&choices)) {
+				calcStore[ij(x,y)*16+12+3] = energy(src, dst, x, y, newMap, &choices);
+				pathStore[ij(x,y)*16+12+3] = choices;
+			}
 		}
 		
 		// If there is a good move, make the change using that move
 		XY bestSrc;
-		XY bestDst;
+		Path bestPath;
 		double bestImprovement = 0;
 		
 		for (int i = 0; i < SIZE; i++) {
 			for (int j = 0; j < SIZE; j++) {
+				double baseline = energy(src, dst, i, j, newMap, (*newMap)[ij(i,j)])
 				for (int k = 0; k < 16; k++) {
-					if (<#condition#>) {
-						<#statements#>
+					double val = energy(src, dst, i, j, newMap, &(pathStore[ij(i,j)*16+k]))
+					if (pathStore[ij(i,j)*16+k].a.x != 10000 
+						&& validPath(&(pathStore[ij(i,j)*16+k])) 
+						&& baseline-val > bestImprovement) {
+						bestImprovement = baseline - val;
+						bestSrc.x = ;
+						bestPath = (pathStore[ij(i,j)*16+k]);
 					}
 				}
 			}
 		}
 		
+		if (bestImprovement > 0) {
+			*(*newMap)[ij(bestSrc.a.x,bestSrc.a.y)] = 
+		}
 		// Add affected pixels to the calculation queue
+		
 	}
 }
 
@@ -910,22 +970,22 @@ Image* ip_warp (Image* src, int warpFactor)
  * After going through with the energy minimization function, it should 
  * return the path with the minimum energy value.
  */
-int[] energy_minimization (int[][] energyArray)
-{
-    int energy = 0;
-	int minEnergy = 10000000; // some really big number to represent infinity
-
-	// code here to calculate the total energy over a path
-	// (call the energy-calculation function)
-	// energy = calculated
-	// change this: energy = energy(Image* src, Image* dst, int x, int y, Path* p)
-
-	if (energy < minEnergy) {
-		minEnergy = energy;
-	}
-
-	return minEnergy;
-}
+//int[] energy_minimization (int[][] energyArray)
+//{
+//    int energy = 0;
+//	int minEnergy = 10000000; // some really big number to represent infinity
+//
+//	// code here to calculate the total energy over a path
+//	// (call the energy-calculation function)
+//	// energy = calculated
+//	// change this: energy = energy(Image* src, Image* dst, int x, int y, Path* p)
+//
+//	if (energy < minEnergy) {
+//		minEnergy = energy;
+//	}
+//
+//	return minEnergy;
+//}
 
 /*
  * Coherency function
@@ -974,7 +1034,7 @@ double coherency(Path* forPixel, Path* forNeighbor)
 	double vnX = partXn / dn;
 	double vnY = partYn / dn;
 
-	costC = min(sqrt(pow(((d * vX) - (dn * vnX)), 2) + pow(((d * vY) - (dn * vnY)), 2)), delta);
+	costC = min(sqrt(pow(((d * vX) - (dn * vnX)), 2) + pow(((d * vY) - (dn * vnY)), 2)), delta*1.0);
 
 	return costC;
 }
