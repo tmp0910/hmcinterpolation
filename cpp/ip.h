@@ -49,6 +49,7 @@ double energy(Image* src, Image* dst, int x, int y, vector<Path*>* originalPaths
 double correspondence(Image* A, Image* B, int x, int y, Path* path);
 double stdDev(Image* image, int x, int y);
 bool validPath(Path* path);
+double coherency(Path* forPixel, Path* forNeighbor);
 Image*  interpolate (Image* i1, Image* i2, double alpha);
 Image*  convolute (Image* src, double* k, int ksize);
 double  resample (Image* src, double w, double h, int chan, int mode, int size, double sigma);
