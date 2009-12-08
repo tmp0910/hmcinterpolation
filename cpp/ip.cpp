@@ -784,3 +784,52 @@ int[] energy_minimization (int[][] energyArray)
 	return minEnergy;
 }
 
+/*
+ * Coherency function
+ * 
+ * Coherency cost puts constraints only on the path lengths and directions of two 
+ * neighboring pixels but not on the transition points.  
+ * The neighboring pixels can still have arbitrary transition points 
+ * very different from each other.
+ */
+double coherency(Path forPixel, Path forNeighbor)
+{
+	// Discontinuity preserving threshold 
+	// Various sample values for examples in the paper are shown in Figure 11
+	int delta = 20; 
+
+	double costC;
+
+	XY forPixelA = forPixel->a;
+	XY forPixelB = forPixel->b;
+
+	XY forNeighborA = forNeighbor->a;
+	XY forNeighborB = forNeighbor->b;
+	
+	int pixelAX = forPixelA->x;
+	int pixelAY = forPixelA->y;
+
+	int pixelBX = forPixelB->x;
+	int pixelBY = forPixelB->y;
+
+	int neighborAX = forNeighborA->x;
+	int neighborAY = forNeighborA->y;
+
+	int neighborBX = forNeighborB->x;
+	int neighborBY = forNeighborB->y;
+
+	int partX = pixelAX + pixelBX;
+	int partY = pixelAY + pixelBY;
+	int partXn = neighborAX + neighborBX;
+	int partYn = neighborAY + neighborBY;
+
+	double magnitude;
+
+	double d = abs();
+	double dn = abs();
+
+	costC = min(abs(), delta);
+
+	return costC;
+}
+
