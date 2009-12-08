@@ -248,9 +248,25 @@ void findPath(Image* src, Image* dst, vector<Path>* smallerMap, vector<Path>* ne
 		
 		if (bestImprovement > 0) {
 			(*newMap)[ij(bestSrc.x,bestSrc.y)] = bestPath;
+			// Add affected pixels to the calculation queue
+			tmpXY = new XY();
+			tmpXY->x = bestSrc.x;
+			tmpXY->y = bestSrc.y;
+			calcQueue.push(tmpXY);
+			
+			double coord[] = {bestSrc.x, bestSrc.y-1, bestSrc.x-1, bestSrc.y, bestSrc.x+1, bestSrc.y, bestSrc.x, bestSrc.y+1};
+			
+			for (int i =0; i<8; i+=2) {
+				if (coord[i] >= 0 and coord[i] < SIZE and coord[i+1] >= 0 and coord[i+1] < SIZE) { //if neighbor is valid
+					tmpXY = new XY();
+					tmpXY->x = coord[i];
+					tmpXY->y = coord[i+1];
+					calcQueue.push(tmpXY);
+				}
+			}
+		} else {
+			break;
 		}
-		// Add affected pixels to the calculation queue
-		
 	}
 }
 
