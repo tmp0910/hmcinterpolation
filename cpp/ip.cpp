@@ -7,6 +7,8 @@
 #include <vector>
 #include <queue>
 
+double MAX_DOUBLE = 1.79769e+308;
+
 Image* ip_interpolate (const char* imageName1, const char* imageName2, double inter)
 {
 	cout << imageName1 << endl;
@@ -49,8 +51,8 @@ Image* ip_interpolate (const char* imageName1, const char* imageName2, double in
 		t2->writeBMP(buffer2);
 	}
 	
-	cout << "should be perfect!\n result is " << correspondence(i1, i2, 3, 3, 29, 29) << endl;
-	cout << "no match!\n result is " << correspondence(i1, i1, 3, 3, 0, 0) << endl;
+	//cout << "should be perfect!\n result is " << correspondence(i1, i2, 3, 3, 29, 29) << endl;
+	//cout << "no match!\n result is " << correspondence(i1, i1, 3, 3, 0, 0) << endl;
 	
 	Image* result = new Image(100,100);
 	return result;
@@ -63,9 +65,14 @@ void findPath(Image* src, Image* dst, vector<Path*>* smallerMap, vector<Path*>* 
 {
 	int SIZE = src->getHeight();
 	// Assume newMap is initialized for now to random points
+	// TODO: initialize newMap
 	
 	// Add all pixels to calculation queue
 	queue<XY*> calcQueue;
+	
+	// Create calculation storage data structure
+	//   Each pixel has 4 possible end locations, so we need to store that
+	vector<double> calcStore(SIZE*SIZE*16);
 	XY* tmpXY;
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
@@ -76,14 +83,11 @@ void findPath(Image* src, Image* dst, vector<Path*>* smallerMap, vector<Path*>* 
 		}
 	}
 	
-	// Create calculation storage data structure
-	//   Each pixel has 4 possible end locations, so we need to store that
-	vector<double> calcStore(SIZE*SIZE*4);
-	
 	while (true) {
 		// Empty queue to calculate and find the best move
 		XY bestSrc;
 		XY bestDst;
+		double bestImprovement = 0;
 		while (!calcQueue.empty())
 		{
 			XY* pt = calcQueue.front();
@@ -93,28 +97,176 @@ void findPath(Image* src, Image* dst, vector<Path*>* smallerMap, vector<Path*>* 
 			int y = pt->y;
 			
 			// First find the baseline for this pixel
-			double baseline = energy(src, dst, x, y, (*newMap)[ij(x,y)]);
+			Path* orig = (*newMap)[ij(x,y)];
+			double baseline = energy(src, dst, x, y, orig);
 			
-			// Next calculate what kind of changes we can achieve with each of the 4 choices
+			Path choices;
+			choices.a.x = orig->a.x;
+			choices.a.y = orig->a.y;
+			choices.b.x = orig->b.x/2*2;
+			choices.b.y = orig->b.y/2*2;
+			
+			// Next calculate what kind of changes we can achieve with each of the 16 choices
+			calcStore[ij(x,y)*16] = energy(src, dst, x, y, &choices);
+			if (baseline - calcStore[ij(x,y)*16] > bestImprovement) {
+				bestSrc = choices.a;
+				bestDst = choices.b;
+				bestImprovement = baseline - calcStore[ij(x,y)*16];
+			}
+			choices.b.x += 1;
+			calcStore[ij(x,y)*16+1] = energy(src, dst, x, y, &choices);
+			if (baseline - calcStore[ij(x,y)*16+1] > bestImprovement) {
+				bestSrc = choices.a;
+				bestDst = choices.b;
+				bestImprovement = baseline - calcStore[ij(x,y)*16+1];
+			}
+			choices.b.x -= 1;
+			choices.b.y += 1;
+			calcStore[ij(x,y)*16+2] = energy(src, dst, x, y, &choices);
+			if (baseline - calcStore[ij(x,y)*16+2] > bestImprovement) {
+				bestSrc = choices.a;
+				bestDst = choices.b;
+				bestImprovement = baseline - calcStore[ij(x,y)*16+2];
+			}
+			choices.b.x += 1;
+			calcStore[ij(x,y)*16+3] = energy(src, dst, x, y, &choices);
+			if (baseline - calcStore[ij(x,y)*16+3] > bestImprovement) {
+				bestSrc = choices.a;
+				bestDst = choices.b;
+				bestImprovement = baseline - calcStore[ij(x,y)*16+3];
+			}
+			
+			choices.a.x += 1;
+			
+			calcStore[ij(x,y)*16+4] = energy(src, dst, x, y, &choices);
+			if (baseline - calcStore[ij(x,y)*16+4] > bestImprovement) {
+				bestSrc = choices.a;
+				bestDst = choices.b;
+				bestImprovement = baseline - calcStore[ij(x,y)*16+4];
+			}
+			choices.b.x += 1;
+			calcStore[ij(x,y)*16+4+1] = energy(src, dst, x, y, &choices);
+			if (baseline - calcStore[ij(x,y)*16+4+1] > bestImprovement) {
+				bestSrc = choices.a;
+				bestDst = choices.b;
+				bestImprovement = baseline - calcStore[ij(x,y)*16+4+1];
+			}
+			choices.b.x -= 1;
+			choices.b.y += 1;
+			calcStore[ij(x,y)*16+4+2] = energy(src, dst, x, y, &choices);
+			if (baseline - calcStore[ij(x,y)*16+4+2] > bestImprovement) {
+				bestSrc = choices.a;
+				bestDst = choices.b;
+				bestImprovement = baseline - calcStore[ij(x,y)*16+4+2];
+			}
+			choices.b.x += 1;
+			calcStore[ij(x,y)*16+4+3] = energy(src, dst, x, y, &choices);
+			if (baseline - calcStore[ij(x,y)*16+4+3] > bestImprovement) {
+				bestSrc = choices.a;
+				bestDst = choices.b;
+				bestImprovement = baseline - calcStore[ij(x,y)*16+4+3];
+			}
+			
+			choices.a.x -= 1;
+			choices.a.y += 1;
+			
+			calcStore[ij(x,y)*16+8] = energy(src, dst, x, y, &choices);
+			if (baseline - calcStore[ij(x,y)*16+8] > bestImprovement) {
+				bestSrc = choices.a;
+				bestDst = choices.b;
+				bestImprovement = baseline - calcStore[ij(x,y)*16+8];
+			}
+			choices.b.x += 1;
+			calcStore[ij(x,y)*16+8+1] = energy(src, dst, x, y, &choices);
+			if (baseline - calcStore[ij(x,y)*16+8+1] > bestImprovement) {
+				bestSrc = choices.a;
+				bestDst = choices.b;
+				bestImprovement = baseline - calcStore[ij(x,y)*16+8+1];
+			}
+			choices.b.x -= 1;
+			choices.b.y += 1;
+			calcStore[ij(x,y)*16+8+2] = energy(src, dst, x, y, &choices);
+			if (baseline - calcStore[ij(x,y)*16+8+2] > bestImprovement) {
+				bestSrc = choices.a;
+				bestDst = choices.b;
+				bestImprovement = baseline - calcStore[ij(x,y)*16+8+2];
+			}
+			choices.b.x += 1;
+			calcStore[ij(x,y)*16+8+3] = energy(src, dst, x, y, &choices);
+			if (baseline - calcStore[ij(x,y)*16+8+3] > bestImprovement) {
+				bestSrc = choices.a;
+				bestDst = choices.b;
+				bestImprovement = baseline - calcStore[ij(x,y)*16+8+3];
+			}
+			
+			choices.a.x += 1;
+			
+			calcStore[ij(x,y)*16+12] = energy(src, dst, x, y, &choices);
+			if (baseline - calcStore[ij(x,y)*16+12] > bestImprovement) {
+				bestSrc = choices.a;
+				bestDst = choices.b;
+				bestImprovement = baseline - calcStore[ij(x,y)*16+12];
+			}
+			choices.b.x += 1;
+			calcStore[ij(x,y)*16+12+1] = energy(src, dst, x, y, &choices);
+			if (baseline - calcStore[ij(x,y)*16+12+1] > bestImprovement) {
+				bestSrc = choices.a;
+				bestDst = choices.b;
+				bestImprovement = baseline - calcStore[ij(x,y)*16+12+1];
+			}
+			choices.b.x -= 1;
+			choices.b.y += 1;
+			calcStore[ij(x,y)*16+12+2] = energy(src, dst, x, y, &choices);
+			if (baseline - calcStore[ij(x,y)*16+12+2] > bestImprovement) {
+				bestSrc = choices.a;
+				bestDst = choices.b;
+				bestImprovement = baseline - calcStore[ij(x,y)*16+12+2];
+			}
+			choices.b.x += 1;
+			calcStore[ij(x,y)*16+12+3] = energy(src, dst, x, y, &choices);
+			if (baseline - calcStore[ij(x,y)*16+12+3] > bestImprovement) {
+				bestSrc = choices.a;
+				bestDst = choices.b;
+				bestImprovement = baseline - calcStore[ij(x,y)*16+12+3];
+			}
 		}
 		
 		// If there is a good move, make the change using that move
-		
+		if (false) {
+			cout << endl;
+		}
 		// Add affected pixels to the calculation queue
 	}
 }
 
-double energy(Image* src, Image* dst, int x, int y, Path* p)
+// calculating the relevant energy portions for a change of path for a particular pixel
+double energy(Image* src, Image* dst, int x, int y, vector<Path*>* originalPaths, Path* path)
 {
-	return 0;
+	double correspondenceCost = correspondence(src, dst, x, y, path);
+	double coherencyCost = 0;
+	int SIZE = src->getHeight();
+	
+	//TODO: write separate neighbors function
+	// neighbors code
+	double coord[] = {x, y-1, x-1, y, x+1, y, x, y+1};
+	
+	for (int i =0; i<8; i+=2) {
+		if (coord[i] >= 0 and coord[i] < SIZE and coord[i+1] >= 0 and coord[i+1] < SIZE) { //if neighbor is valid
+			coherencyCost += coherency(path, (*originalPaths)[ ij(coord[i], coord[i+1]) ]); //compute coherency
+		}
+	}
+	
+	return correspondenceCost + 2*coherencyCost;
 }
 
-double correspondence(Image* A, Image* B, int p1_x, int p1_y, int p2_x, int p2_y)
+double correspondence(Image* A, Image* B, int x, int y, Path* path)
 {
-	int pA_x = p1_x;
-	int pA_y = p1_y;
-	int pB_x = p2_x;
-	int pB_y = p2_y;
+	XY vectorA = path->a;
+	XY vectorB = path->b;
+	int pA_x = x + vectorA.x;
+	int pA_y = y + vectorA.y;
+	int pB_x = x - vectorB.x;
+	int pB_y = y - vectorB.y;
 	
 	// function
 	double gradientCost = pow(sqrt(pow( gradientx(A, pA_x, pA_y) - gradientx(B, pB_x, pB_y),2) + pow( gradienty(A, pA_x, pA_y) - gradienty(B, pB_x, pB_y),2)),2);
@@ -137,6 +289,9 @@ double stdDev(Image* image, int x, int y)
 	double stdDev = 0;
 	double mean = 0;
 	double numNeighbors = 0;
+	
+	//TODO: write separate neighbors function
+	//neighbors code
 	double coord[] = {x, y-1, x-1, y, x+1, y, x, y+1};
 	
 	for (int i =0; i<8; i+=2) {
@@ -144,7 +299,7 @@ double stdDev(Image* image, int x, int y)
 			mean += image->getPixel(coord[i], coord[i+1], 0);
 			numNeighbors += 1;
 		}
-		else {
+		else { // set the coordinates to be invalid
 			coord[i] = -1;
 			coord[i+1] = -1;
 		}
@@ -152,14 +307,31 @@ double stdDev(Image* image, int x, int y)
 	}
 	mean /= numNeighbors;
 	for (int i=0; i<8; i+=2) {
-		if (coord[i]>=0) {
+		if (coord[i]>=0) { // check if the coordinates are in the image
 			stdDev += pow( image->getPixel(coord[i], coord[i+1], 0)-mean,2);
 		}
 	}
 	stdDev /= numNeighbors;
 	stdDev = sqrt(stdDev); // got the STDDEV of neighbors
-	return (image->getPixel(x, y, 0)-mean)/stdDev;
-}	
+	
+	double valueDifference = image->getPixel(x, y, 0) - mean; // difference b/w pixel and mean value of neighbors
+	
+	// numDevAway is the number of deviations the pixel is from its neighbors
+	double numDevAway = valueDifference / stdDev;
+	
+	if (valueDifference == 0) { // if pixel is the same as mean of neighbors,
+		numDevAway = 0; // then it is 0 deviations away
+	}
+	else if (stdDev == 0) { // handling divide by 0 case
+		numDevAway = MAX_DOUBLE; // TODO: some kind of scaling proportional to the valueDifference
+	}
+	if (numDevAway < 0) { // ensure numDevAway is positive
+		numDevAway = -numDevAway;
+	}
+	return numDevAway;
+}
+
+
 
 double gradienty(Image* img, int x, int y)
 {	
