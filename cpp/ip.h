@@ -45,7 +45,7 @@ struct Path {
 Image* ip_interpolate (const char* imageName1, const char* imageName2, double inter);
 double gradientx(Image* img, int x, int y);
 double gradienty(Image* img, int x, int y);
-double energy(Image* src, Image* dst, int x, int y, vector<Path*>* originalPaths, Path* path);
+double energy(Image* src, Image* dst, int x, int y, vector<Path>* originalPaths, Path* path);
 double correspondence(Image* A, Image* B, int x, int y, Path* path);
 double stdDev(Image* image, int x, int y);
 bool validPath(Path* path);

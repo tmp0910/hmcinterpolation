@@ -61,15 +61,15 @@ Image* ip_interpolate (const char* imageName1, const char* imageName2, double in
 #define ij(X,Y) ((X)+SIZE*(Y))
 
 // findPath takes a source and destination image, the paths of the layer one smaller, and a vector of the same size
-void findPath(Image* src, Image* dst, vector<Path*>* smallerMap, vector<Path*>* newMap)
+void findPath(Image* src, Image* dst, vector<Path>* smallerMap, vector<Path>* newMap)
 {
 	int SIZE = src->getHeight();
 	// Assume newMap is initialized for now to random points
 	for (int x=0; x<SIZE; x++) {
 		for (int y=0; y<SIZE; y++) {
 			// for every pixel, push a plausible path based from the smallerMap
-			Path* oldPath = (*smallerMap)[ ij(x/2,y/2) ];
-			Path* newPath = (*newMap)[ij(x,y)];
+			Path* oldPath = &((*smallerMap)[ ij(x/2,y/2) ]);
+			Path* newPath = &((*newMap)[ij(x,y)]);
 			newPath->a.x = 2*oldPath->a.x + rand()%2;
 			newPath->a.y = 2*oldPath->a.y + rand()%2;
 			newPath->b.x = 2*oldPath->b.x + rand()%2;
@@ -117,7 +117,7 @@ void findPath(Image* src, Image* dst, vector<Path*>* smallerMap, vector<Path*>* 
 			int y = pt->y;
 			
 			// First find the baseline for this pixel
-			Path* orig = (*newMap)[ij(x,y)];
+			Path* orig = &(*newMap)[ij(x,y)];
 			
 			Path choices;
 			choices.a.x = orig->a.x/2*2;
@@ -231,14 +231,15 @@ void findPath(Image* src, Image* dst, vector<Path*>* smallerMap, vector<Path*>* 
 		
 		for (int i = 0; i < SIZE; i++) {
 			for (int j = 0; j < SIZE; j++) {
-				double baseline = energy(src, dst, i, j, newMap, (*newMap)[ij(i,j)])
+				double baseline = energy(src, dst, i, j, newMap, &(*newMap)[ij(i,j)]);
 				for (int k = 0; k < 16; k++) {
-					double val = energy(src, dst, i, j, newMap, &(pathStore[ij(i,j)*16+k]))
+					double val = energy(src, dst, i, j, newMap, &(pathStore[ij(i,j)*16+k]));
 					if (pathStore[ij(i,j)*16+k].a.x != 10000 
 						&& validPath(&(pathStore[ij(i,j)*16+k])) 
 						&& baseline-val > bestImprovement) {
 						bestImprovement = baseline - val;
-						bestSrc.x = ;
+						bestSrc.x = i;
+						bestSrc.y = j;
 						bestPath = (pathStore[ij(i,j)*16+k]);
 					}
 				}
@@ -246,7 +247,7 @@ void findPath(Image* src, Image* dst, vector<Path*>* smallerMap, vector<Path*>* 
 		}
 		
 		if (bestImprovement > 0) {
-			*(*newMap)[ij(bestSrc.a.x,bestSrc.a.y)] = 
+			(*newMap)[ij(bestSrc.x,bestSrc.y)] = bestPath;
 		}
 		// Add affected pixels to the calculation queue
 		
@@ -271,7 +272,7 @@ bool validPath(Path* path)
 }
 
 // calculating the relevant energy portions for a change of path for a particular pixel
-double energy(Image* src, Image* dst, int x, int y, vector<Path*>* originalPaths, Path* path)
+double energy(Image* src, Image* dst, int x, int y, vector<Path>* originalPaths, Path* path)
 {
 	double correspondenceCost = correspondence(src, dst, x, y, path);
 	double coherencyCost = 0;
@@ -283,7 +284,7 @@ double energy(Image* src, Image* dst, int x, int y, vector<Path*>* originalPaths
 	
 	for (int i =0; i<8; i+=2) {
 		if (coord[i] >= 0 and coord[i] < SIZE and coord[i+1] >= 0 and coord[i+1] < SIZE) { //if neighbor is valid
-			coherencyCost += coherency(path, (*originalPaths)[ ij(coord[i], coord[i+1]) ]); //compute coherency
+			coherencyCost += coherency(path, &(*originalPaths)[ ij(coord[i], coord[i+1]) ]); //compute coherency
 		}
 	}
 	
