@@ -757,3 +757,30 @@ Image* ip_warp (Image* src, int warpFactor)
 	}
 	return result;
 }
+
+
+/*
+ * Energy minimization with graph cuts
+ * 
+ * The input will be an array of paths, where by the path will need to contain
+ * the starting pixel location and the ending pixel location.
+ * After going through with the energy minimization function, it should 
+ * return the path with the minimum energy value.
+ */
+int[] energy_minimization (int[][] energyArray)
+{
+    int energy = 0;
+	int minEnergy = 10000000; // some really big number to represent infinity
+
+	// code here to calculate the total energy over a path
+	// (call the energy-calculation function)
+	// energy = calculated
+	// change this: energy = energy(Image* src, Image* dst, int x, int y, Path* p)
+
+	if (energy < minEnergy) {
+		minEnergy = energy;
+	}
+
+	return minEnergy;
+}
+
