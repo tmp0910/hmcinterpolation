@@ -995,12 +995,15 @@ double coherency(Path forPixel, Path forNeighbor)
 	int partXn = neighborAX + neighborBX;
 	int partYn = neighborAY + neighborBY;
 
-	double magnitude;
+	double d = sqrt((partX * partX) + (partY * partY));
+	double dn = sqrt((partXn * partXn) + (partYn * partYn));
 
-	double d = abs();
-	double dn = abs();
+	double vX = partX / d;
+	double vY = partY / d;
+	double vnX = partXn / dn;
+	double vnY = partYn / dn;
 
-	costC = min(abs(), delta);
+	costC = min(sqrt(pow(((d * vX) - (dn * vnX)), 2) + pow(((d * vY) - (dn * vnY)), 2)), delta);
 
 	return costC;
 }
