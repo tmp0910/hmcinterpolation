@@ -51,10 +51,49 @@ Image* ip_interpolate (const char* imageName1, const char* imageName2, double in
 		t2->writeBMP(buffer2);
 	}
 	
+
+	Path initPath;
+	initPath.a.x = 0;
+	initPath.a.y = 0;
+	initPath.b.x = 0;
+	initPath.b.y = 0;
+	vector<Path>* prevMap(1, initPath);
+	vector<Path>* newMap;
+	vector<Image*>::reverse_iterator rit_a = p1.rbegin();
+	vector<Image*>::reverse_iterator rit_b = p2.rbegin();
+	for ( ; rit_b < p2.rend(); ++rit_a, ++rit_b) {
+		newMap = new vector<Path>((*rit_b->getHeight()) * (*rit_b->getHeight())); 
+		findPath(*rit_a, *rit_b, prevMap, newMap);
+		prevMap = newMap;
+	}
+
 	//cout << "should be perfect!\n result is " << correspondence(i1, i2, 3, 3, 29, 29) << endl;
 	//cout << "no match!\n result is " << correspondence(i1, i1, 3, 3, 0, 0) << endl;
 	
-	Image* result = new Image(100,100);
+	int SIZE = i1->getHeight();
+	Image* result = new Image(SIZE, SIZE);
+
+	for (int x = 0; x < SIZE; ++x) {
+		for (int y = 0; y < SIZE; ++y) {
+			Path path = (*newMap)[ij(x, y)];
+			double length_a = lengthXY(path.a);
+			double length_b = lengthXY(path.b);
+			double totalLength = length_a + length_b;
+			double interVal = totalLength * inter;
+			if (interVal > length_a) { // then from image b
+				// normalize
+				interVal = 1 - ((interVal - length_a) / length_b);
+				double xVal = -path.b.x * interVal + x;
+				double yVal = -path.b.y * interVal + y;
+			}
+			else {
+				double xVal = path.a.x * (interVal/length_a);
+				double yVal = path.a.y * (interVal/length_a);
+			}
+
+		}
+	}
+
 	return result;
 }
 
