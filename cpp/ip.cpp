@@ -191,58 +191,58 @@ void findPath(Image* src, Image* dst, vector<Path>* smallerMap, vector<Path>* ne
 			Path choices;
 			choices.a.x = orig->a.x/2*2;
 			choices.a.y = orig->a.y/2*2;
-			choices.b.x = orig->b.x/2*2;
-			choices.b.y = orig->b.y/2*2;
+			choices.b.x = orig->b.x/2*2-2;
+			choices.b.y = orig->b.y/2*2-2;
 			
 			// Next calculate what kind of changes we can achieve with each of the 16 choices
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16] = choices;
 			}
-			choices.b.x += -1;
+			choices.b.x += 1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+1] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+1] = choices;
 			}
-			choices.b.x -= -1;
-			choices.b.y += -1;
+			choices.b.x -= 1;
+			choices.b.y += 1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+2] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+2] = choices;
 			}
-			choices.b.x += -1;
+			choices.b.x += 1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+3] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+3] = choices;
 			}
 			
-			choices.b.x -= -1;
-			choices.b.y -= -1;
+			choices.b.x -= 1;
+			choices.b.y -= 1;
 			choices.a.x += 1;
 			
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+4] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+4] = choices;
 			}
-			choices.b.x += -1;
+			choices.b.x += 1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+4+1] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+4+1] = choices;
 			}
-			choices.b.x -= -1;
-			choices.b.y += -1;
+			choices.b.x -= 1;
+			choices.b.y += 1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+4+2] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+4+2] = choices;
 			}
-			choices.b.x += -1;
+			choices.b.x += 1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+4+3] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+4+3] = choices;
 			}
 			
-			choices.b.x -= -1;
-			choices.b.y -= -1;
+			choices.b.x -= 1;
+			choices.b.y -= 1;
 			choices.a.x -= 1;
 			choices.a.y += 1;
 			
@@ -250,43 +250,43 @@ void findPath(Image* src, Image* dst, vector<Path>* smallerMap, vector<Path>* ne
 				calcStore[ij(x,y)*16+8] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+8] = choices;
 			}
-			choices.b.x += -1;
+			choices.b.x += 1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+8+1] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+8+1] = choices;
 			}
-			choices.b.x -= -1;
-			choices.b.y += -1;
+			choices.b.x -= 1;
+			choices.b.y += 1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+8+2] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+8+2] = choices;
 			}
-			choices.b.x += -1;
+			choices.b.x += 1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+8+3] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+8+3] = choices;
 			}
 			
-			choices.b.x -= -1;
-			choices.b.y -= -1;
+			choices.b.x -= 1;
+			choices.b.y -= 1;
 			choices.a.x += 1;
 			
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+12] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+12] = choices;
 			}
-			choices.b.x += -1;
+			choices.b.x += 1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+12+1] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+12+1] = choices;
 			}
-			choices.b.x -= -1;
-			choices.b.y += -1;
+			choices.b.x -= 1;
+			choices.b.y += 1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+12+2] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+12+2] = choices;
 			}
-			choices.b.x += -1;
+			choices.b.x += 1;
 			if (validPath(&choices)) {
 				calcStore[ij(x,y)*16+12+3] = energy(src, dst, x, y, newMap, &choices);
 				pathStore[ij(x,y)*16+12+3] = choices;
@@ -343,14 +343,16 @@ bool validPath(Path* path)
 {	// dot product is 1 or -1
 	XY a = path->a;
 	XY b = path->b;
-	
+	if ((a.x == 0 && a.y == 0) || (b.x == 0 && b.y == 0)) {
+		return true;
+	}
 	double dotSum = a.x*b.x + a.y*b.y;
 	double magnitudeA = sqrt( pow(a.x, 2) + pow(a.y, 2) );
 	double magnitudeB = sqrt( pow(b.x, 2) + pow(b.y, 2) );
 	
 	double dotProduct = dotSum/(magnitudeA * magnitudeB);
 	
-	if (dotProduct == -1 || dotProduct == 0) {
+	if (dotProduct == -1 ) {
 		return true;
 	}
 	return false;
@@ -445,9 +447,9 @@ double stdDev(Image* image, int x, int y)
 //	else if (stdDev == 0) { // handling divide by 0 case
 //		numDevAway = MAX_DOUBLE; // TODO: some kind of scaling proportional to the valueDifference
 //	}
-//	if (numDevAway < 0) { // ensure numDevAway is positive
-//		numDevAway = -numDevAway;
-//	}
+	if (numDevAway < 0) { // ensure numDevAway is positive
+		numDevAway = -numDevAway;
+	}
 	return numDevAway;
 }
 
