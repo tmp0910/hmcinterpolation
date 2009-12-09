@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>CS155 Final Project - Alex Yin, Sayuri Soejima, and Simon Yang</title>
+</head>
+<body>
+
+  <center>
+  <H2> CS155 - Computer Graphics <br>
+  Final Project: "Moving Gradients: A Path-Based Method for Plausible Image Interpolation"<br>
+  Alex Yin, Sayuri Soejima, Simon Yang
+</H2>
+  </center>
+
+  <br></br>
+
+
+The main paper referenced: <br></br>
+  <a href="http://simonyang.info/interpolation.pdf">Interpolation Paper</a>
+
+  <br>
+    <br></br>
+  </br>
+  Other papers used/referenced in our implementation:
+
+<br></br>
+
+  <a href="http://www.cs.cornell.edu/rdz/papers/bvz-iccv99.pdf">
+    Fast Approximate Energy Minimization via Graph Cuts
+  </a>
+
+ <br></br>
+
+  <a href="http://www.cs.cornell.edu/~rdz/Papers/KZ-ICCV01-tr.pdf">
+    Computing Visual Correspondence with Occlusions via Graph Cuts
+  </a>
+
+
+  <br>
+    <br></br>
+  </br>
+  <b>Some of the problems we had during implementation</b>
+  <ul>
+    <li>
+      We did try our best to follow the implementation described by the paper.  However, the paper was 
+      severely lacking in implementation details.  There were several sections within our program where 
+      we were forced into making decisions without there being enough information in the paper to allow us 
+      to make informed implementation decisions.
+    </li>
+      <ul>
+        <li>For example, it didn't explain what to do when the pixel is 0 standard deviations away from its neighbors.  
+    Mathematically speaking, this would give a divide-by-0 error, but the paper never addressed this edge case.
+    There were several other similar issues where we didn't know what decision to make for implementation 
+    just based on the paper itself.</li>
+        <li>
+          Another of the problems we encountered was dealing with the case when the transition points fall outside of the
+          image boundaries.
+        </li>
+    </li>
+    </ul>
+    <li>Graph cuts.  The paper was good about giving a general outline of the general algorithm (what happens, the concept, etc.), 
+    but many important details required for implementation were severely lacking.  We also referred to the two other papers 
+    that were mentioned within the main interpolation paper, but although the reference to the graph cuts papers was made, 
+    the authors did not go into explanation as to how the graph cuts algorithm would actually be relevant to the interpolation 
+    method.  The way we implemented the interpolation method did not actually require graphs at all, as we spoke about with you 
+    in your office one morning (and as you also agreed with us).</li>
+    <ul>
+      <li>
+        The references were made, but the main paper's authors did not connect the graph cuts papers to how they used the 
+        method within their interpolation algorithm.
+      </li>
+    </ul>
+    <li>We tried tracking down and emailing the authors of the paper, but did not receive any responses.</li>
+
+    
+    
+  </ul>
+  
+ 
+  
+  
+</body>
+</html>
