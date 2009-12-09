@@ -10,7 +10,7 @@
   Final Project: "Moving Gradients: A Path-Based Method for Plausible Image Interpolation"<br>
   Alex Yin, Sayuri Soejima, Simon Yang
 </H2>
-  </center>
+
 
   <br></br>
 
@@ -34,8 +34,53 @@ The main paper referenced: <br></br>
   <a href="http://www.cs.cornell.edu/~rdz/Papers/KZ-ICCV01-tr.pdf">
     Computing Visual Correspondence with Occlusions via Graph Cuts
   </a>
+    
+  </center>
 
+  <br>
+    <br></br>
+  </br>
 
+  <b>A wiki where we kept track of general progress/sources:</b><br>
+  </br>
+  <a href="http://code.google.com/p/hmcinterpolation/wiki/Home">
+    Google code wiki
+  </a>
+
+  <br>
+    <br></br>
+  </br>
+
+  <b>Project Description</b><br></br>
+  Given two input images, the goal of the project is to implement a system that allows
+  us to come up with a plausible interpolation of the two images. There are two
+  components to our project that we must consider. The first portion is the path algorithm.
+  The algorithm finds a plausible path for each pixel, and uses that for interpolation.
+  In order to accomplish the interpolation process, we use energy minimization techniques
+  to calculate transition points.
+
+  <br>
+    <br></br>
+  </br>
+
+  <b>Notes about our implementation</b><br></br>
+  For interpolation values between 0.3 and 0.7, we get variable quality of results, depending on 
+  the run.  After running multiple series of tests, we sometimes got reasonable images, and 
+  other times, it spit out less reasonable images.
+  
+  <br>
+    <br></br>
+  </br>
+  
+  <b>How to run the program</b>
+  <ul>
+    <li>Compile the code and run the executable (the program is called "interpolation").</li>
+    <li>Right click on the window and select "Process"->"Interpolate".</li>
+    <li>It will ask for the files, so there are 3 inputs: the first 2 inputs are .bmp files, and 
+        the last input is a double between 0 and 1 (inclusive).</li>
+    <li>Wait until the process finishes (may take up to 3 hours...).</li>
+  </ul>
+  
   <br>
     <br></br>
   </br>
@@ -71,13 +116,96 @@ The main paper referenced: <br></br>
       </li>
     </ul>
     <li>We tried tracking down and emailing the authors of the paper, but did not receive any responses.</li>
-
-    
+    <li>The algorithms took a long time to run, which made it hard to test and verify results.</li>
+    <ul>
+      <li>For a 256x256 greyscale image 
+          (the image of the girl, taken from the paper example), it took over an hour to run.</li>
+    </ul>
     
   </ul>
+
+  <br>
+    <br></br>
+  </br>
+
+  <b>Suggested grading rubric/our work:</b> (58/75 total points) <br></br>
+  <ul>
+    <li>23/40 points: Path implementation</li>
+    <ul>
+      <li>5/5 points: Brief write-up from each member about the path 
+          implementation in the paper, to demonstrate our understanding. 
+          As part of this process, we will each read everyone’s write-up, 
+          in order to catch any misunderstandings before getting into heavy implementation.</li>
+      <ul>
+        <li>Write-ups were written by all 3 of us.  It is posted on the Google code wiki.</li>
+      </ul>
+      <li>8/10 points: Path construction – determining possible paths from the input images.</li>
+      <ul>
+        <li>This portion of the code is at least mostly working--it IS generating paths, and 
+             we are able to work with them.  However, there is something going awry with the 
+             actual paths, so it is not completely worthy of 10 points.</li>
+      </ul>
+      <li>8/10 points: Computing transition points. This will involve energy-minimization, or min-cost.</li>
+      <ul>
+        <li>We are correctly computing transition points for arbitrary paths.  
+        However, we are not certain if the paths we are getting from this process are 
+        actually the best ones available.  However, we believe we should get most of the points 
+        for this rubric item, because the calculation should be correct (although it is 
+        hard to test for path-correctness with an arbirary image).</li>
+      </ul>
+      <li>0/10 points: Occlusion handling.</li>
+      <ul>
+        <li>We were not able to get to Occlusion handling within the timeframe of this project.</li>
+      </ul>
+      <li>2/5 points: Use gradients instead of image intensities during interpolation, 
+          to improve the interpolation results (particularly with edges).</li>
+      <ul>
+        <li>We were not able to get to using gradients during interpolation, but we did 
+        write a gradients function, which we used in energy minimization.</li>
+      </ul>
+    </ul>   
+    <li>25/25 points: Energy function</li>
+    <ul>
+      <li>
+        5/5 points: Brief write-up from each member about the energy function
+        implemented in the paper, to demonstrate our understanding.
+        As part of this process, we will each read everyone’s write-up,
+        in order to catch any misunderstandings and to further our understanding.
+      </li>
+      <ul>
+        <li>Write-ups were written by all 3 of us.  It is posted on the Google code wiki.</li>
+      </ul>
+      <li>10/10 points: Graph cuts.</li>
+      <ul>
+        <li>As recommended by Prof. Z during a meeting (on 11/30), we decided not to 
+        go with the graph cuts method, but to instead go with a hill-climbling method.  
+        Unfortunately, this may be the reason that our algorithm takes a ridiculously 
+        long time to run (past an hour and a half), although we are not completely certain.  
+        However, we DID completely implement the other hill-climbing method, 
+        which would be the equivalent of having completed   the whole graph cuts implementation.
+        </li>
+      </ul>
+      <li>10/10 points: Computing a local minimum.</li>
+      <ul>
+        <li>We do compute the local minimum, as specified.</li>
+      </ul>
+    </ul>
+    <li>10/10 points: HTML write-up describing the features we implemented</li>
+  </ul>
+
+  <br></br>
   
- 
-  
-  
+  <b>Checklist for other work:</b> (25 total points) <br></br>
+  <ul>
+    <li>10 points: Proposal - 2-3 page proposal submitted, and it is also on our wiki (linked above).
+        Everything required should be included in the proposal, which we also emailed to Prof. Z.</li>
+    <li>5 points: Wiki - We kept a wiki, and each kept an individual log of the work done and 
+        progress made throughout the project.  Individual logs may be in different places, according 
+        to each person's preference (either on our Google code wiki, or on our individual CS Twikis).</li>
+    <li>5 points: Concept presentation - Given in class.</li>
+    <li>5 points: Final presentation - To be given on Thursday, 12/10/2009.</li>
+  </ul>
+
+
 </body>
 </html>
