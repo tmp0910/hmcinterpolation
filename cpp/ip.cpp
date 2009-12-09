@@ -141,14 +141,14 @@ void findPath(Image* src, Image* dst, vector<Path>* smallerMap, vector<Path>* ne
 			Path* newPath = &((*newMap)[ij(x,y)]);
 			newPath->a.x = 2*oldPath->a.x + rand()%2;
 			newPath->a.y = 2*oldPath->a.y + rand()%2;
-			newPath->b.x = 2*oldPath->b.x - rand()%2;
-			newPath->b.y = 2*oldPath->b.y - rand()%2;
+			newPath->b.x = 2*oldPath->b.x - rand()%2-1;
+			newPath->b.y = 2*oldPath->b.y - rand()%2-1;
 			while (!validPath(newPath)) {
 				
 				newPath->a.x = 2*oldPath->a.x + rand()%2;
 				newPath->a.y = 2*oldPath->a.y + rand()%2;
-				newPath->b.x = 2*oldPath->b.x - rand()%2;
-				newPath->b.y = 2*oldPath->b.y - rand()%2;
+				newPath->b.x = 2*oldPath->b.x - rand()%2-1;
+				newPath->b.y = 2*oldPath->b.y - rand()%2-1;
 			}
 		}
 	}
