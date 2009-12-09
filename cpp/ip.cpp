@@ -79,7 +79,7 @@ Image* ip_interpolate (const char* imageName1, const char* imageName2, double in
 				bestEnergy += energy((*rit_a), *rit_b, i, j, newMap, &(*newMap)[i+j*(*rit_a)->getHeight()]);
 			}
 		}
-		for (int asdf = 0; asdf < 15; asdf++) {
+		for (int asdf = 0; asdf < 8; asdf++) {
 			newMap = new vector<Path>((*rit_b)->getHeight() * (*rit_b)->getHeight()); 
 			findPath(*rit_a, *rit_b, prevMap, newMap);
 			double currEnergy = 0;
@@ -441,9 +441,9 @@ double stdDev(Image* image, int x, int y)
 	// numDevAway is the number of deviations the pixel is from its neighbors
 	double numDevAway = valueDifference / stdDev;
 	
-//	if (valueDifference == 0) { // if pixel is the same as mean of neighbors,
-//		numDevAway = 0; // then it is 0 deviations away
-//	}
+	if (valueDifference == 0) { // if pixel is the same as mean of neighbors,
+		numDevAway = 0; // then it is 0 deviations away
+	}
 //	else if (stdDev == 0) { // handling divide by 0 case
 //		numDevAway = MAX_DOUBLE; // TODO: some kind of scaling proportional to the valueDifference
 //	}
