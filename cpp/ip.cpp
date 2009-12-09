@@ -72,6 +72,28 @@ Image* ip_interpolate (const char* imageName1, const char* imageName2, double in
 		cout << "doing comp! " << (*rit_a)->getHeight() << endl;
 		newMap = new vector<Path>((*rit_b)->getHeight() * (*rit_b)->getHeight()); 
 		findPath(*rit_a, *rit_b, prevMap, newMap);
+		vector<Path>* bestMap = newMap;
+		double bestEnergy = 0;
+		for (int i = 0; i < (*rit_a)->getHeight(); i++) {
+			for (int j = 0; j < (*rit_a)->getHeight(); j++) {
+				bestEnergy += energy((*rit_a), *rit_b, i, j, newMap, &(*newMap)[i+j*(*rit_a)->getHeight()]);
+			}
+		}
+		for (int asdf = 0; asdf < 15; asdf++) {
+			newMap = new vector<Path>((*rit_b)->getHeight() * (*rit_b)->getHeight()); 
+			findPath(*rit_a, *rit_b, prevMap, newMap);
+			double currEnergy = 0;
+			for (int i = 0; i < (*rit_a)->getHeight(); i++) {
+				for (int j = 0; j < (*rit_a)->getHeight(); j++) {
+					currEnergy += energy((*rit_a), *rit_b, i, j, newMap, &(*newMap)[i+j*(*rit_a)->getHeight()]);
+				}
+			}
+			if (currEnergy < bestEnergy){
+				bestEnergy = currEnergy;
+				bestMap = newMap;
+			}
+		}
+		newMap = bestMap;
 		prevMap = newMap;
 	}
 
@@ -96,8 +118,8 @@ Image* ip_interpolate (const char* imageName1, const char* imageName2, double in
 				result->setPixel(x, y, 0, clamp(resample(i2, xVal, yVal, 0, I_BILINEAR, 0, 0), 0, 1));
 			}
 			else {
-				double xVal = path.a.x * (interVal/length_a);
-				double yVal = path.a.y * (interVal/length_a);
+				double xVal = path.a.x * (interVal/length_a)+x;
+				double yVal = path.a.y * (interVal/length_a)+y;
 				result->setPixel(x, y, 0, clamp(resample(i1, xVal, yVal, 0, I_BILINEAR, 0, 0), 0, 1));
 			}
 
@@ -119,8 +141,8 @@ void findPath(Image* src, Image* dst, vector<Path>* smallerMap, vector<Path>* ne
 			Path* newPath = &((*newMap)[ij(x,y)]);
 			newPath->a.x = 2*oldPath->a.x + rand()%2;
 			newPath->a.y = 2*oldPath->a.y + rand()%2;
-			newPath->b.x = 2*oldPath->b.x + rand()%2;
-			newPath->b.y = 2*oldPath->b.y + rand()%2;
+			newPath->b.x = 2*oldPath->b.x - rand()%2;
+			newPath->b.y = 2*oldPath->b.y - rand()%2;
 			while (!validPath(newPath)) {
 				
 				newPath->a.x = 2*oldPath->a.x + rand()%2;
@@ -328,7 +350,7 @@ bool validPath(Path* path)
 	
 	double dotProduct = dotSum/(magnitudeA * magnitudeB);
 	
-	if (dotProduct == -1) {
+	if (dotProduct == -1 || dotProduct == 0) {
 		return true;
 	}
 	return false;
@@ -337,6 +359,7 @@ bool validPath(Path* path)
 // calculating the relevant energy portions for a change of path for a particular pixel
 double energy(Image* src, Image* dst, int x, int y, vector<Path>* originalPaths, Path* path)
 {
+	int lambda = 10;
 	double correspondenceCost = correspondence(src, dst, x, y, path);
 	double coherencyCost = 0;
 	int SIZE = src->getHeight();
@@ -351,7 +374,7 @@ double energy(Image* src, Image* dst, int x, int y, vector<Path>* originalPaths,
 		}
 	}
 	
-	return correspondenceCost + 2*coherencyCost;
+	return correspondenceCost + lambda * 2*coherencyCost;
 }
 
 double correspondence(Image* A, Image* B, int x, int y, Path* path)
@@ -389,9 +412,9 @@ double stdDev(Image* image, int x, int y)
 	
 	//TODO: write separate neighbors function
 	//neighbors code
-	double coord[] = {x, y-1, x-1, y, x+1, y, x, y+1};
+	double coord[] = {x, y-1, x-1, y, x+1, y, x, y+1, x, y};
 	
-	for (int i =0; i<8; i+=2) {
+	for (int i =0; i<10; i+=2) {
 		if (coord[i] >= 0 and coord[i] < image->getWidth() and coord[i+1] >= 0 and coord[i+1] < image->getHeight()) {
 			mean += image->getPixel(coord[i], coord[i+1], 0);
 			numNeighbors += 1;
@@ -403,7 +426,7 @@ double stdDev(Image* image, int x, int y)
 		
 	}
 	mean /= numNeighbors;
-	for (int i=0; i<8; i+=2) {
+	for (int i=0; i<10; i+=2) {
 		if (coord[i]>=0) { // check if the coordinates are in the image
 			stdDev += pow( image->getPixel(coord[i], coord[i+1], 0)-mean,2);
 		}
@@ -416,15 +439,15 @@ double stdDev(Image* image, int x, int y)
 	// numDevAway is the number of deviations the pixel is from its neighbors
 	double numDevAway = valueDifference / stdDev;
 	
-	if (valueDifference == 0) { // if pixel is the same as mean of neighbors,
-		numDevAway = 0; // then it is 0 deviations away
-	}
-	else if (stdDev == 0) { // handling divide by 0 case
-		numDevAway = MAX_DOUBLE; // TODO: some kind of scaling proportional to the valueDifference
-	}
-	if (numDevAway < 0) { // ensure numDevAway is positive
-		numDevAway = -numDevAway;
-	}
+//	if (valueDifference == 0) { // if pixel is the same as mean of neighbors,
+//		numDevAway = 0; // then it is 0 deviations away
+//	}
+//	else if (stdDev == 0) { // handling divide by 0 case
+//		numDevAway = MAX_DOUBLE; // TODO: some kind of scaling proportional to the valueDifference
+//	}
+//	if (numDevAway < 0) { // ensure numDevAway is positive
+//		numDevAway = -numDevAway;
+//	}
 	return numDevAway;
 }
 
@@ -1065,7 +1088,7 @@ double coherency(Path* forPixel, Path* forNeighbor)
 {
 	// Discontinuity preserving threshold 
 	// Various sample values for examples in the paper are shown in Figure 11
-	int delta = 20; 
+	int delta = 2; 
 
 	double costC;
 
