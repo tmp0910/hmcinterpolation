@@ -141,8 +141,8 @@ void findPath(Image* src, Image* dst, vector<Path>* smallerMap, vector<Path>* ne
 			Path* newPath = &((*newMap)[ij(x,y)]);
 			newPath->a.x = 2*oldPath->a.x + rand()%2;
 			newPath->a.y = 2*oldPath->a.y + rand()%2;
-			newPath->b.x = 2*oldPath->b.x + rand()%2;
-			newPath->b.y = 2*oldPath->b.y + rand()%2;
+			newPath->b.x = 2*oldPath->b.x - rand()%2;
+			newPath->b.y = 2*oldPath->b.y - rand()%2;
 			while (!validPath(newPath)) {
 				
 				newPath->a.x = 2*oldPath->a.x + rand()%2;
@@ -350,7 +350,7 @@ bool validPath(Path* path)
 	
 	double dotProduct = dotSum/(magnitudeA * magnitudeB);
 	
-	if (dotProduct == -1) {
+	if (dotProduct == -1 || dotProduct == 0) {
 		return true;
 	}
 	return false;
@@ -359,6 +359,7 @@ bool validPath(Path* path)
 // calculating the relevant energy portions for a change of path for a particular pixel
 double energy(Image* src, Image* dst, int x, int y, vector<Path>* originalPaths, Path* path)
 {
+	int lambda = 10;
 	double correspondenceCost = correspondence(src, dst, x, y, path);
 	double coherencyCost = 0;
 	int SIZE = src->getHeight();
@@ -373,7 +374,7 @@ double energy(Image* src, Image* dst, int x, int y, vector<Path>* originalPaths,
 		}
 	}
 	
-	return correspondenceCost + 2*coherencyCost;
+	return correspondenceCost + lambda * 2*coherencyCost;
 }
 
 double correspondence(Image* A, Image* B, int x, int y, Path* path)
