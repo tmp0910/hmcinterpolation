@@ -6,30 +6,28 @@
 <body>
 
   <center>
-  <H2> CS155 - Computer Graphics <br>
-  Final Project: "Moving Gradients: A Path-Based Method for Plausible Image Interpolation"<br>
+  <H2> CS155 - Computer Graphics <br />
+  Final Project: "Moving Gradients: A Path-Based Method for Plausible Image Interpolation"<br />
   Alex Yin, Sayuri Soejima, Simon Yang
 </H2>
 
 
-  <br></br>
+  <br />
 
 
-The main paper referenced: <br></br>
+The main paper referenced: <br />
   <a href="http://simonyang.info/interpolation.pdf">Interpolation Paper</a>
 
-  <br>
-    <br></br>
-  </br>
+<br /><br />
   Other papers used/referenced in our implementation:
 
-<br></br>
+<br />
 
   <a href="http://www.cs.cornell.edu/rdz/papers/bvz-iccv99.pdf">
     Fast Approximate Energy Minimization via Graph Cuts
   </a>
 
- <br></br>
+ <br />
 
   <a href="http://www.cs.cornell.edu/~rdz/Papers/KZ-ICCV01-tr.pdf">
     Computing Visual Correspondence with Occlusions via Graph Cuts
@@ -37,21 +35,16 @@ The main paper referenced: <br></br>
     
   </center>
 
-  <br>
-    <br></br>
-  </br>
+<br /><br />
 
-  <b>A wiki where we kept track of general progress/sources:</b><br>
-  </br>
+  <b>A wiki where we kept track of general progress/sources:</b><br />
   <a href="http://code.google.com/p/hmcinterpolation/wiki/Home">
     Google code wiki
   </a>
 
-  <br>
-    <br></br>
-  </br>
+<br /><br />
 
-  <b>Project Description</b><br></br>
+  <b>Project Description</b><br />
   Given two input images, the goal of the project is to implement a system that allows
   us to come up with a plausible interpolation of the two images. There are two
   components to our project that we must consider. The first portion is the path algorithm.
@@ -59,62 +52,45 @@ The main paper referenced: <br></br>
   In order to accomplish the interpolation process, we use energy minimization techniques
   to calculate transition points.
 
-  <br>
-    <br></br>
-  </br>
+  <br />
+  <br />
 
-  <b>Notes about our implementation</b><br></br>
-  For interpolation values between 0.3 and 0.7, we get variable quality of results, depending on 
-  the run.  After running multiple series of tests, we sometimes got reasonable images, and 
-  other times, it spit out less reasonable images.
+<b> Algorithm Overview </b> <br />
+We first create a gaussian pyramid for each of the input images. This allows us to find paths with arbitrary transition points without having an extremely large set of paths to consider. After generating the gaussian pyramids, we would start finding paths starting from the smallest layer of the pyramid. We pick paths for pixels based on a few metrics. A path defines two transition points between the two images for a pixel location. We constrain the two vectors that go towards the transition points to have the parallel, but opposite, directions. This is to ensure that movement of the transition points is uniform throughout the interpolation range. We want to minimize both correspondence (difference in the transition points in terms of gradient and color) and coherency (the difference in motion between the neighboring pixel paths). The paper proposes a graph cut method of minimizing the energy. Once we pick the correct path for a layer, we can move on to the next layer. <br /><br />
+
+After completing in finding the path, we can then easily interpolate the new image by following the paths to find where the original pixel value should be. The paper proposes to use gradients instead of intensity for better results, especially in preserving edges.
+
+<br /> <br />
+
+  <b>Notes about our implementation</b><br />
+  For interpolation values between 0.2 and 0.8, the quality of results may vary greatly depending on the run.
   
-  <br>
-    <br></br>
-  </br>
+<br /><br />
   
   <b>How to run the program</b>
   <ul>
     <li>Compile the code and run the executable (the program is called "interpolation").</li>
     <li>Right click on the window and select "Process"->"Interpolate".</li>
-    <li>It will ask for the files, so there are 3 inputs: the first 2 inputs are .bmp files, and 
+    <li>There are 3 inputs: the first 2 inputs are .bmp files, and 
         the last input is a double between 0 and 1 (inclusive).</li>
-    <li>Wait until the process finishes (may take up to 3 hours...).</li>
+    <li>Wait until the process finishes (may take several hours...).</li>
   </ul>
   
-  <br>
-    <br></br>
-  </br>
+<br /><br />
   <b>Some of the problems we had during implementation</b>
   <ul>
     <li>
-      We did try our best to follow the implementation described by the paper.  However, the paper was 
-      severely lacking in implementation details.  There were several sections within our program where 
-      we were forced into making decisions without there being enough information in the paper to allow us 
-      to make informed implementation decisions.
+      We did try our best to follow the implementation described by the paper.  However, there were several areas within the implementation that we were unable to figure out.
     </li>
       <ul>
-        <li>For example, it didn't explain what to do when the pixel is 0 standard deviations away from its neighbors.  
-    Mathematically speaking, this would give a divide-by-0 error, but the paper never addressed this edge case.
-    There were several other similar issues where we didn't know what decision to make for implementation 
-    just based on the paper itself.</li>
+        <li>We spent a significant amount of time trying to understand the use of standard deviation in the correspondence function. We were stuck on the decision of whether or not to include the center pixel in the standard deviation calculation. We were also unable to look into the reference mentioned in the section because it was a book we didn't have access to. We also had some issues with edge cases when doing correspondence calculations.</li>
         <li>
           Another of the problems we encountered was dealing with the case when the transition points fall outside of the
-          image boundaries.
+          image boundaries. We currently essentially disallow any transition points outside the image. But this may be forcing some assumptions that would prevent the path finding algorithm from finding the optimal path. We also did not have time to investigate occlusion handling. It may be that occlusion handling would have corrected for the external paths.
         </li>
     </li>
     </ul>
-    <li>Graph cuts.  The paper was good about giving a general outline of the general algorithm (what happens, the concept, etc.), 
-    but many important details required for implementation were severely lacking.  We also referred to the two other papers 
-    that were mentioned within the main interpolation paper, but although the reference to the graph cuts papers was made, 
-    the authors did not go into explanation as to how the graph cuts algorithm would actually be relevant to the interpolation 
-    method.  The way we implemented the interpolation method did not actually require graphs at all, as we spoke about with you 
-    in your office one morning (and as you also agreed with us).</li>
-    <ul>
-      <li>
-        The references were made, but the main paper's authors did not connect the graph cuts papers to how they used the 
-        method within their interpolation algorithm.
-      </li>
-    </ul>
+    <li>Graph cuts.  The paper provided a good overview of the overall interpolation process, but only briefly referenced two graph-cuts papers for the energy minimization implementation. Although the referenced papers described in detail in graph-cuts algorithm, it was unclear from the main paper how to apply the graph-cuts to our particular energy minimization problem.  Therefore, under Professor Z's recommendation, we implemented a hill-climbing approach for energy minimization instead.</li>
     <li>We tried tracking down and emailing the authors of the paper, but did not receive any responses.</li>
     <li>The algorithms took a long time to run, which made it hard to test and verify results.</li>
     <ul>
@@ -124,11 +100,9 @@ The main paper referenced: <br></br>
     
   </ul>
 
-  <br>
-    <br></br>
-  </br>
+<br /><br />
 
-  <b>Suggested grading rubric/our work:</b> (58/75 total points) <br></br>
+  <b>Suggested grading rubric/our work:</b> (58/75 total points) <br />
   <ul>
     <li>23/40 points: Path implementation</li>
     <ul>
@@ -193,9 +167,9 @@ The main paper referenced: <br></br>
     <li>10/10 points: HTML write-up describing the features we implemented</li>
   </ul>
 
-  <br></br>
+  <br />
   
-  <b>Checklist for other work:</b> (25 total points) <br></br>
+  <b>Checklist for other work:</b> (25 total points) <br />
   <ul>
     <li>10 points: Proposal - 2-3 page proposal submitted, and it is also on our wiki (linked above).
         Everything required should be included in the proposal, which we also emailed to Prof. Z.</li>
