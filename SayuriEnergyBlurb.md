@@ -1,0 +1,3 @@
+About the energy minimization method/implementation described in the paper.
+
+We were able to locate 2 additional papers that describe more in detail the energy minimization algorithm described in the original paper; the two papers describe the graph cuts method that can be used to minimize the energy cost.  The minimum cut problem is essentially to find the cut with the smallest cost, where a cut is essentially a set of edges such that the terminals are separated in the graph after the cut is made.  Thus, if we input an energy function into the graph cuts algorithm, then the value we get out as the minimum cut should be what we need to minimize our energy requirement.
